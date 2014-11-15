@@ -18,11 +18,35 @@ google.load('visualization', '1.0', {
 google.setOnLoadCallback(main);
 
 function main() {
-	
+
+  var QueryString = function() {
+    // This function is anonymous, is executed immediately and 
+    // the return value is assigned to QueryString!
+    var query_string = {};
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split("=");
+      // If first entry with this name
+      if (typeof query_string[pair[0]] === "undefined") {
+        query_string[pair[0]] = pair[1];
+        // If second entry with this name
+      } else if (typeof query_string[pair[0]] === "string") {
+        var arr = [query_string[pair[0]], pair[1]];
+        query_string[pair[0]] = arr;
+        // If third or later entry with this name
+      } else {
+        query_string[pair[0]].push(pair[1]);
+      }
+    }
+    return query_string;
+  }();
+
   // Load Company Data
   var company = {};
   // For prototype, we use dummy data in an XML
-  $.get('twitter.xml', function(myContentFile) {
+  var cname = QueryString.name === undefined ? "linkedin" : QueryString.name;
+  $.get(cname + '.xml', function(myContentFile) {
 
     company.about = {};
     xmlDoc = $.parseXML(myContentFile),
@@ -157,7 +181,7 @@ function main() {
   var renderGraphs = function(people) {
     drawCurrentWorkYearDistribution(people);
 
-    
+
 
     var current_employees = people.filter(function(person) {
       for (var position in person.positions) {
@@ -201,12 +225,12 @@ function main() {
       $('#desc_list').append('<li class="aboutlist"><h3>' + key + '</h3><p>' + company.about[key] + '</p></li>')
     }*/
 
-    
+
     var keys = [];
     var keyCount = 0;
     for (var key in company.about) {
-	  keys[keyCount] = key;
-	  keyCount++;
+      keys[keyCount] = key;
+      keyCount++;
       /*$('#desc_list').append(
         '<tr><td><h3>' + key + '</h3></td><td>' + company.about[key] + '</td></tr>') */
     }
@@ -227,21 +251,21 @@ function main() {
 	} else {
 	  $('#desc_list').append('<tr><td><h3>' + "summary" + '</h3></td><td colspan="3" align="left">' + company.desc + '</td></tr></table>')	
 	}*/
-	
-	var str = "";
-	str += '<table style="width:100%">';
-	str += '<tr><td><h3>name</h3></td>';
-	for (var i = 0; i < keyCount; i++){
-	  str += '<td><h3>' + keys[i] + '</h3></td>';	
-	}
-	str += '</tr><tr><td>' + company.name + '</td>';
-	for (var i = 0; i < keyCount; i++){
-	  str += '<td>' + company.about[keys[i]] + '</td>';
-	}
-	str += '</tr>';
-	str += '<tr><td valign = "top"><h3>summary</h3></td><td colspan="3" align="left">' + company.desc + '</td></tr></table>'
-	$('#desc_list').append(str);
-    
+
+    var str = "";
+    str += '<table style="width:100%">';
+    str += '<tr><td><h3>name</h3></td>';
+    for (var i = 0; i < keyCount; i++) {
+      str += '<td><h3>' + keys[i] + '</h3></td>';
+    }
+    str += '</tr><tr><td>' + company.name + '</td>';
+    for (var i = 0; i < keyCount; i++) {
+      str += '<td>' + company.about[keys[i]] + '</td>';
+    }
+    str += '</tr>';
+    str += '<tr><td valign = "top"><h3>summary</h3></td><td colspan="3" align="left">' + company.desc + '</td></tr></table>'
+    $('#desc_list').append(str);
+
   };
 
   var drawCurrentWorkYearDistribution = function(p) {
@@ -374,7 +398,7 @@ function main() {
   var drawWorkExpDistribution = function(people) {
     var expMap = {};
     var getWorkExpDistribution = function(p) {
-      
+
       for (var person in p) {
         var grad_year = "0";
         for (var school in p[person].educations) {
@@ -658,4 +682,3 @@ function getDuration(start, end) {
   }
   return parseInt(end.year) - parseInt(start.year);
 }
-
