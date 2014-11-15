@@ -409,7 +409,7 @@ function main() {
 
     var rows = getDegreeDistribution(people);
 
-    drawChart("Degree Distribution in Current Employees", [
+    drawChart("Degrees Current Employees Hold", [
       ['string', 'Topping'],
       ['number', 'Slices']
     ], rows, PIE_CHART, 'chart02_div');
