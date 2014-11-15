@@ -17,9 +17,10 @@ google.setOnLoadCallback(main);
 
 function main() {
   // Load Company Data
+  var company = {};
   // For prototype, we use dummy data in an XML
   $.get('linkedin.xml', function(myContentFile) {
-    var company = {};
+    
     company.about = {};
     xmlDoc = $.parseXML(myContentFile),
     $xml = $(xmlDoc),
@@ -38,7 +39,9 @@ function main() {
     $xml.find('founded-year').each(function () {
       company.about.founded = $(this).text();
     });
-
+    $xml.find('name').each(function () {
+      company.name = $(this).text();
+    });
     showCompanyInfo(company);
   }, 'text');
 
@@ -67,6 +70,9 @@ function main() {
 
   var renderGraphs = function (people) {
 
+  	//Bar chart for software engineers ratio
+  	renderSoftwareEnggRatio(people);
+
   };
 
   var showCompanyInfo = function (company) {
@@ -78,7 +84,25 @@ function main() {
     
   };
 
+  var renderSoftwareEnggRatio = function(people) {
+	//Render bar chart for sofware engineer ratio
+	for(var i=0;i<people.length;i++)
+	{
+		for(var position in people[i].positions)
+		{
+			if(position.is_currentv && position.company==company.name)
+			{
+				//2011 data
 
+				//2012 data
+
+				//2013 data
+
+				//2014 data
+			}
+		}
+	}  	
+  }
 
   // Load People Search Result
   // For prototype, we use dummy data in an XML
