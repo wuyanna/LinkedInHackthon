@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+
+function loadXMLDoc(dname)
+{
+if (window.XMLHttpRequest)
+  {
+  xhttp=new XMLHttpRequest();
+  }
+else
+  {
+  xhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xhttp.open("GET",dname,false);
+try {xhttp.responseType="msxml-document"} catch(err) {} // Helping IE
+xhttp.send("");
+return xhttp;
+}
+
+var x=loadXMLDoc("linkedin.xml");
+var xml=x.responseXML;
+path="/company/name";
+
+// code for IE
+//if (window.ActiveXObject || xhttp.responseType=="msxml-document")
+//{
+//xml.setProperty("SelectionLanguage","XPath");
+//nodes=xml.selectNodes(path);
+//for (i=0;i<nodes.length;i++)
+//  {
+//  document.write(nodes[i].childNodes[0].nodeValue);
+//  document.write("<br>");
+//  }
+//}
+
+console.log("Testing");
+
+// code for Chrome, Firefox, Opera, etc.
+//else if (document.implementation && document.implementation.createDocument)
+//{
+var nodes=xml.evaluate(path, xml, null, XPathResult.ANY_TYPE, null);
+var result=nodes.iterateNext();
+
+while (result)
+  {
+  document.write(result.childNodes[0].nodeValue); 
+  document.write("<br>");
+  result=nodes.iterateNext();
+  }
+//}
+
+</script>
+
+<p> Testing if something gets printed from HTML</p>
+</body>
+</html>
