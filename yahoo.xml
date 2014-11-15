@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<company>
+<id>1288</id>
+<name>Yahoo</name>
+<logo-url>
+https://media.licdn.com/mpr/mpr/p/5/005/00e/318/39cf760.png
+</logo-url>
+<description>
+About Yahoo Yahoo is focused on making the world's daily habits inspiring and entertaining. By creating highly personalized experiences for our users, we keep people connected to what matters most to them, across devices and around the globe. In turn, we create value for advertisers by connecting them with the audiences that build their businesses. Yahoo is headquartered in Sunnyvale, Calif., and has offices located throughout the Americas, Asia Pacific (APAC) and the Europe, Middle East and Africa (EMEA) regions. For more information, visit the pressroom (pressroom.yahoo.net) or the company's blog (http://yahoo.tumblr.com).
+</description>
+<website-url>http://www.yahoo.com</website-url>
+<industries total="1">
+<industry>
+<code>6</code>
+<name>Internet</name>
+</industry>
+</industries>
+<founded-year>1994</founded-year>
+</company>

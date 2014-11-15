@@ -58,15 +58,9 @@
   	</style>
   </head>
   <body>
-  
-    <script type="text/javascript" src="http://platform.linkedin.com/in.js">
-      api_key: 75oa3bqal87ryg 
-      onLoad: onLinkedInLoad
-      authorize: true
-    </script>    
-    <script type="in/Login">
-      Hello, <?js= firstName ?> <?js= lastName ?>.
-    </script>
+
+
+    <a href="https://www.linkedin.com/uas/oauth2/authorization?response_type=code&client_id=75oa3bqal87ryg&scope=r_fullprofile%20r_emailaddress%20r_network&state=DCEEFWF45453sdffef424&redirect_uri=http://localhost:8000">Login!</a>
 
   	<div class="bl" id="company_logo" class="outer">
       <img id="logo" src="" class="scaling-image">
@@ -80,10 +74,11 @@
   	<div class="bl">
     <table>
 	  <tr>
-		<td colspan="3" align="center">
+		<td colspan="2" align="center">
 			<h3> Current Employees Statistics</h3>
 		</td>
 	  </tr>
+	
       <tr>
         <td>
           <div class="chart" id="chart01_div"></div>
@@ -91,25 +86,29 @@
         <td>
           <div class="chart" id="chart02_div"></div>
         </td>
+      </tr>
+
+      <tr>
         <td>
           <div class="chart" id="chart03_div"></div>
+        </td>
+	    <td>
+          <div class="chart" id="chart08_div"></div>
         </td>
       </tr>
 
       <tr>
-	    <td>
-          <div class="chart" id="chart05_div"></div>
-        </td>
         <td>
-          <div class="chart" id="chart08_div"></div>
+          <div class="chart" id="chart05_div"></div>
         </td>
         <td>
           <div class="chart" id="chart09_div"></div>
         </td>
       </tr>
 
+
       <tr>
-		<td colspan="3" align="center">
+		<td colspan="2" align="center">
 			<h3> Past Employees Statistics</h3>
 		</td>
 	  </tr>
@@ -119,12 +118,10 @@
           <div class="chart" id="chart04_div" style="width:75%"></div>
         </td>
         <td>
-          <div class="chart" id="chart06_div"></div>
-        </td>
-        <td>
           <div class="chart" id="chart07_div"></div>
         </td>
       </tr>
+
     </table>
     </div>
     <script type="text/javascript" src="jquery-1.11.1.js"></script>

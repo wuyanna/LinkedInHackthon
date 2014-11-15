@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<company>
+<id>96622</id>
+<name>Twitter</name>
+<logo-url>
+https://media.licdn.com/mpr/mpr/p/2/000/1e8/3f9/0f6b64f.png
+</logo-url>
+<description>
+Twitter is a global platform for public self-expression and conversation in real time. By developing a fundamentally new way for people to create, distribute and discover content, we have democratized content creation and distribution, enabling any voice to echo around the world instantly and unfiltered. The service can be accessed at Twitter.com, via Twitter mobile applications for a variety of devices, and by text message. Available in more than 35 languages, Twitter has more than 255 million monthly active users. For more information, visit discover.twitter.com or follow @twitter. U.S. offices Atlanta, Austin, Boston, Boulder, Chicago, Detroit, Los Angeles, New York, Seattle, Sunnyvale, Washington International offices Amsterdam, Berlin, Dublin, London, Madrid, Paris, Rio de Janeiro, São Paulo, Singapore, Sydney, Seoul, Tokyo, Toronto, Vancouver
+</description>
+<website-url>https://about.twitter.com/</website-url>
+<industries total="1">
+<industry>
+<code>6</code>
+<name>Internet</name>
+</industry>
+</industries>
+<founded-year>2006</founded-year>
+</company>

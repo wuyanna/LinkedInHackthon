@@ -18,11 +18,11 @@ google.load('visualization', '1.0', {
 google.setOnLoadCallback(main);
 
 function main() {
-
+	
   // Load Company Data
   var company = {};
   // For prototype, we use dummy data in an XML
-  $.get('linkedin.xml', function(myContentFile) {
+  $.get('twitter.xml', function(myContentFile) {
 
     company.about = {};
     xmlDoc = $.parseXML(myContentFile),
@@ -467,7 +467,7 @@ function main() {
 
     var rows = getDegreeDistribution(people);
 
-    drawChart("Degree Distribution in Current Employees", [
+    drawChart("Degrees Current Employees Hold", [
       ['string', 'Topping'],
       ['number', 'Slices']
     ], rows, PIE_CHART, 'chart02_div');
@@ -659,27 +659,3 @@ function getDuration(start, end) {
   return parseInt(end.year) - parseInt(start.year);
 }
 
-function onLinkedInLoad() {
-
-  console.log("LOADED");
-
-  // Listen for an auth event to occur
-  IN.Event.on(IN, "auth", onLinkedInAuth);
-}
-
-function onLinkedInAuth() {
-
-  linkedInAuth = true;
-  console.log("LinkedIn Auth");
-
-  //Fetching company data from LinkedIn Company API
-  // $.get(
-  // "https://api.linkedin.com/v1/companies/universal-name=linkedin",
-  // {},
-  // function(data) {
-  //    alert('page content: ' + data);
-  // }
-  // );
-
-  // var a = 5;
-}

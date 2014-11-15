@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<company>
+<id>1028</id>
+<name>Oracle</name>
+<logo-url>
+https://media.licdn.com/mpr/mpr/p/2/000/019/195/0a52b6a.png
+</logo-url>
+<description>
+With more than 380,000 customers—including 100 of the Fortune 100—and with deployments across a wide variety of industries in more than 145 countries around the globe, Oracle offers an optimized and fully integrated stack of business hardware and software systems. Oracle engineers hardware and software to work together in the cloud and in your data center–from servers and storage, to database and middleware, through applications. Learn more about Oracle http://oracle.com/us/corporate
+</description>
+<website-url>http://www.oracle.com</website-url>
+<industries total="1">
+<industry>
+<code>96</code>
+<name>Information Technology & Services</name>
+</industry>
+</industries>
+<founded-year>1977</founded-year>
+</company>
