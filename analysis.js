@@ -19,6 +19,12 @@ google.setOnLoadCallback(main);
 
 function main() {
 
+	//load company data from api
+	$.get(
+	    'ttps://api.linkedin.com/v1/companies/universal-name=linkedin?oauth2_access_token=AQXdSP_W41_UPs5ioT_t8HESyODB4FqbkJ8LrV_5mff4gPODzOYR',
+	    function(data) { alert(data); }
+	);
+	
   // Load Company Data
   var company = {};
   // For prototype, we use dummy data in an XML
@@ -520,27 +526,3 @@ function getDuration(start, end) {
   return parseInt(end.year) - parseInt(start.year);
 }
 
-function onLinkedInLoad() {
-
-console.log("LOADED");
-
-   // Listen for an auth event to occur
-   IN.Event.on(IN, "auth", onLinkedInAuth);
-}
-
-function onLinkedInAuth() {
-
-linkedInAuth = true;
-console.log("LinkedIn Auth");
-
-//Fetching company data from LinkedIn Company API
-// $.get(
-// "https://api.linkedin.com/v1/companies/universal-name=linkedin",
-// {},
-// function(data) {
-//    alert('page content: ' + data);
-// }
-// );
-
-// var a = 5;
-}   
