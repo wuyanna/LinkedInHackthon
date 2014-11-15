@@ -16,10 +16,12 @@ google.load('visualization', '1.0', {
 google.setOnLoadCallback(main);
 
 function main() {
+  var company = {};
+
   // Load Company Data
   // For prototype, we use dummy data in an XML
   $.get('linkedin.xml', function(myContentFile) {
-    var company = {};
+
     company.about = {};
     xmlDoc = $.parseXML(myContentFile),
     $xml = $(xmlDoc),
@@ -38,7 +40,9 @@ function main() {
     $xml.find('founded-year').each(function() {
       company.about.founded = $(this).text();
     });
-
+    $xml.find('company > name').each(function() {
+      company.name = $(this).text();
+    });
     showCompanyInfo(company);
   }, 'text');
 
@@ -149,7 +153,9 @@ function main() {
   }, 'text');
 
   var renderGraphs = function(people) {
+    drawCurrentWorkYearDistribution(people);
 
+    drawPastWorkYearDistribution(people);
   };
 
   var showCompanyInfo = function(company) {
@@ -160,6 +166,83 @@ function main() {
     }
 
   };
+
+  var drawCurrentWorkYearDistribution = function(people) {
+
+    var getCurrentWorkYearsDistribution = function(p) {
+      var yearMap = [];
+      var maxYears = 0;
+      for (var person in p) {
+        for (var position in p[person].positions) {
+          if (p[person].positions[position].company === company.name && p[person].positions[position].is_current === "true") {
+            var years = getDurationTillNow(p[person].positions[position].start_date);
+            if (yearMap[years] === undefined) {
+              yearMap[years] = 1;
+            } else {
+              yearMap[years] = yearMap[years] + 1;
+            }
+            maxYears = Math.max(years, maxYears);
+          }
+        }
+      }
+
+      var rows = [];
+      for (var i = 0; i <= maxYears; i++) {
+        var entry = [];
+        entry[0] = "" + i + "yrs";
+        entry[1] = yearMap[i];
+        rows.push(entry);
+      }
+
+      return rows;
+    };
+
+    var rows = getCurrentWorkYearsDistribution(people);
+    // Working years distribution in current employees
+    drawChart("Working years distribution in current employees", [
+      ['string', 'Topping'],
+      ['number', 'Slices']
+    ], rows, PIE_CHART, 'chart03_div');
+  };
+
+  var drawPastWorkYearDistribution = function(people) {
+
+    var getPastWorkYearsDistribution = function(p) {
+      var yearMap = [];
+      var maxYears = 0;
+      for (var person in p) {
+        for (var position in p[person].positions) {
+          if (p[person].positions[position].company === company.name && p[person].positions[position].is_current === "false") {
+            var years = getDuration(p[person].positions[position].start_date, p[person].positions[position].end_date);
+            if (yearMap[years] === undefined) {
+              yearMap[years] = 1;
+            } else {
+              yearMap[years] = yearMap[years] + 1;
+            }
+            maxYears = Math.max(years, maxYears);
+          }
+        }
+      }
+
+      var rows = [];
+      for (var i = 0; i <= maxYears; i++) {
+        var entry = [];
+        entry[0] = "" + i + "yrs";
+        entry[1] = yearMap[i];
+        rows.push(entry);
+      }
+
+      return rows;
+    };
+
+    var rows = getPastWorkYearsDistribution(people);
+    // Working years distribution in past employees
+    drawChart("Working years distribution in past employees", [
+      ['string', 'Topping'],
+      ['number', 'Slices']
+    ], rows, PIE_CHART, 'chart07_div');
+
+  }
 
 
 
@@ -203,19 +286,6 @@ function main() {
   ], PIE_CHART, 'chart02_div');
 
 
-  // Working years distribution in current employees
-  drawChart("Working years distribution in current employees", [
-    ['string', 'Topping'],
-    ['number', 'Slices']
-  ], [
-    ['1 yr', 3],
-    ['2 yrs', 1],
-    ['3 yrs', 1],
-    ['4 yrs', 1],
-    ['5 yrs', 1],
-    ['more than 5 yrs', 1],
-  ], PIE_CHART, 'chart03_div');
-
 
   // Graduation Schools distribution in current employees
   drawChart("Graduation Schools distribution in current employees", [
@@ -250,19 +320,6 @@ function main() {
     ['Total Employees', 1],
   ], PIE_CHART, 'chart06_div');
 
-
-  // Working years distribution in past employees
-  drawChart("Working years distribution in past employees", [
-    ['string', 'Topping'],
-    ['number', 'Slices']
-  ], [
-    ['1 yr', 3],
-    ['2 yrs', 1],
-    ['3 yrs', 1],
-    ['4 yrs', 1],
-    ['5 yrs', 1],
-    ['more than 5 yrs', 1],
-  ], PIE_CHART, 'chart07_div');
 
 
   // // What company did they go to
@@ -325,4 +382,16 @@ function drawBarChart(title, columns, rows, div) {
   var chart = new google.visualization.BarChart(document.getElementById(div));
 
   chart.draw(data, options);
+}
+
+function getDurationTillNow(start) {
+  return 2014 - parseInt(start.year);
+}
+
+// return years
+function getDuration(start, end) {
+  if (end === undefined) {
+    return getDurationTillNow(start);
+  }
+  return parseInt(end.year) - parseInt(start.year);
 }
