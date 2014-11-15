@@ -48,7 +48,7 @@ function main() {
     showCompanyInfo(company);
   }, 'text');
 
-  $.get('sample_data.xml', function(myContentFile) {
+  $.get('random10.xml', function(myContentFile) {
     var people = [];
     xmlDoc = $.parseXML(myContentFile),
     $xml = $(xmlDoc),
@@ -534,13 +534,13 @@ linkedInAuth = true;
 console.log("LinkedIn Auth");
 
 //Fetching company data from LinkedIn Company API
-$.get(
-"https://api.linkedin.com/v1/companies/universal-name=linkedin",
-{},
-function(data) {
-   alert('page content: ' + data);
-}
-);
+// $.get(
+// "https://api.linkedin.com/v1/companies/universal-name=linkedin",
+// {},
+// function(data) {
+//    alert('page content: ' + data);
+// }
+// );
 
-var a = 5;
+// var a = 5;
 }   
