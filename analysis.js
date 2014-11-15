@@ -199,12 +199,47 @@ function main() {
       $('#desc_list').append('<li class="aboutlist"><h3>' + key + '</h3><p>' + company.about[key] + '</p></li>')
     }*/
 
-    $('#desc_list').append('<table style="width:100%">')
+    
+    var keys = [];
+    var keyCount = 0;
     for (var key in company.about) {
-      $('#desc_list').append(
-        '<tr><td><h3>' + key + '</h3></td><td>' + company.about[key] + '</td></tr>')
+	  keys[keyCount] = key;
+	  keyCount++;
+      /*$('#desc_list').append(
+        '<tr><td><h3>' + key + '</h3></td><td>' + company.about[key] + '</td></tr>') */
     }
-    $('#desc_list').append('</table>')
+
+    /*$('#desc_list').append('<table style="width:100%">')
+    $('#desc_list').append('<tr><td><h3>' + "name" + '</h3></td><td>' + company.name + '</td>')
+    for (var i = 0; i < keyCount; i++) {
+	  if (i % 2 == 0) { 
+		$('#desc_list').append(
+        '<td><h3>' + keys[i] + '</h3></td><td>' + company.about[keys[i]] + '</td></tr>')
+      } else {
+	    $('#desc_list').append(
+        '<tr><td><h3>' + keys[i] + '</h3></td><td>' + company.about[keys[i]] + '</td>')
+      }
+	}
+	if (keyCount % 2 == 0){
+	  $('#desc_list').append('</tr><tr><td>' + "summary" + '</td><td colspan="3" align="left">' + company.desc + '</td></tr></table>')	
+	} else {
+	  $('#desc_list').append('<tr><td><h3>' + "summary" + '</h3></td><td colspan="3" align="left">' + company.desc + '</td></tr></table>')	
+	}*/
+	
+	var str = "";
+	str += '<table style="width:100%">';
+	str += '<tr><td><h3>name</h3></td>';
+	for (var i = 0; i < keyCount; i++){
+	  str += '<td><h3>' + keys[i] + '</h3></td>';	
+	}
+	str += '</tr><tr><td>' + company.name + '</td>';
+	for (var i = 0; i < keyCount; i++){
+	  str += '<td>' + company.about[keys[i]] + '</td>';
+	}
+	str += '</tr>';
+	str += '<tr><td valign = "top"><h3>summary</h3></td><td colspan="3" align="left">' + company.desc + '</td></tr></table>'
+	$('#desc_list').append(str);
+    
   };
 
   var drawCurrentWorkYearDistribution = function(p) {
