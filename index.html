@@ -45,6 +45,16 @@
   	</style>
   </head>
   <body>
+  
+    <script type="text/javascript" src="http://platform.linkedin.com/in.js">
+      api_key: 75oa3bqal87ryg 
+      onLoad: onLinkedInLoad
+      authorize: true
+    </script>    
+    <script type="in/Login">
+      Hello, <?js= firstName ?> <?js= lastName ?>.
+    </script>
+
   	<div id="company_logo" class="outer">
       <img id="logo" src="" class="scaling-image">
   	</div>
@@ -54,7 +64,6 @@
 
   		</ul>
   	</div>
-
 
     <table style="width:100%">
 	  <tr>
@@ -102,8 +111,8 @@
       </tr>
     </table>
 
-	<script type="text/javascript" src="jquery-1.11.1.js"></script>
-  	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="jquery-1.11.1.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   	<script type="text/javascript" src="analysis.js"></script>
   </body>
 

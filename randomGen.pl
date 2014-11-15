@@ -12,7 +12,7 @@ open(FNAMES, '<', "/Users/Shannon/devHer/firstnames") or die "Couldn't open firs
 open(LNAMES, '<', "/Users/Shannon/devHer/lastnames") or die "Couldn't open last names, $!";
 
 
-my ($rand_title, $rand_ed, $pos_max_len, $pos_len, $pos_yr_sum, $profile_id, $f_name, $l_name, $pos_total, $pos_id, $pos_title, $pos_start_year, $pos_start_month, $pos_is_current, $pos_company, $ed_total, $ed_id, $ed_school, $ed_degree, $ed_start, $ed_end, $working_years);
+my ($rand_title, $rand_ed, $pos_max_len, $pos_len, $pos_yr_sum, $pos_current_total, $ed_current_degree, $profile_id, $f_name, $l_name, $pos_total, $pos_id, $pos_title, $pos_start_year, $pos_start_month, $pos_is_current, $pos_company, $ed_total, $ed_id, $ed_school, $ed_degree, $ed_start, $ed_end);
 
 my @pos_title_arr = ("Software Engineer", "Product Manager", "Project Manager", "Quality Assurance Engineer");
 
@@ -22,8 +22,9 @@ my @ed_school_arr = ("Carnegie Mellon University", "Massachusetts Institute of T
 
 my @ed_degree_arr = (" ", "Bachelor of Computer Science", "Master of Computer Science",  "PhD in Computer Science");
 
+my @degree_len_arr = (" ", 4, 2, 3);
 
-my (@f_name_arr, @l_name_arr);
+my (@f_name_arr, @l_name_arr, @pos_len_arr);
 
 my $countf = 0;
 
@@ -49,19 +50,19 @@ while (my $line = <LNAMES>)
 
 print RAND10 '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <people-search>
-  <num-results>1000</num-results>
-  <people total="1000">
+  <num-results>100</num-results>
+  <people total="100">
 ';
 
-for (my $i = 0; $i < 10; $i++)
+for (my $i = 0; $i < 100; $i++)
 {
 
 	$f_name = $f_name_arr[int(rand(300))];
 	$l_name = $l_name_arr[int(rand(300))];
 	$profile_id = int(rand(999999999));
-#	$working_years = int(rand(30));
 	$pos_total = 1 + int(rand(10));
-
+	
+	print "Total # of positions is $pos_total\n";
 
 
 	$rand_title = int(rand(10));
@@ -102,6 +103,22 @@ for (my $i = 0; $i < 10; $i++)
         $ed_total = (1 + $rand_ed);
 	print "The ed degree is $ed_degree_arr[$ed_total]\n";
 
+	$pos_max_len = int((1 + int(rand(30))) / $pos_total);
+	print "The max length is $pos_max_len\n";
+	$pos_yr_sum = 0;
+	$pos_current_total = 0;
+	@pos_len_arr = ();
+
+	for (my $num_pos = 0; $num_pos < $pos_total; $num_pos++)
+	{
+		$pos_len = 1 + int(rand($pos_max_len));
+		$pos_len_arr[$num_pos] = $pos_len;
+		$pos_yr_sum += $pos_len;
+	}
+
+	print "The sum is $pos_yr_sum\n";
+	print "The individual job lengths are @pos_len_arr\n";
+
 
 #	print RAND10 "$f_name, $l_name, $profile_id, $pos_total, $pos_id, $pos_title, $pos_start_month, $pos_is_current, $pos_company, $ed_total, $ed_id, $ed_school, $ed_degree, $working_years\n";
 
@@ -116,7 +133,7 @@ for (my $i = 0; $i < 10; $i++)
 	for (my $num_pos = 0; $num_pos < $pos_total; $num_pos++)
 	{
 
-		if ($num_pos = 0)
+		if ($num_pos == 0)
 		{
 			$pos_is_current = "true";
 		}
@@ -125,18 +142,11 @@ for (my $i = 0; $i < 10; $i++)
 			$pos_is_current = "false";
 		}
 
-		$pos_max_len = (1 + rand(30)) / $pos_total;
-		print "The max length is $pos_max_len\n";
-
-		$pos_yr_sum = 0;
-
-		for (
-
 			
 		$pos_id = int(rand(999999));
-#		$pos_start_year  #calc based on working years
+		$pos_current_total += $pos_len_arr[$num_pos];
+		$pos_start_year = (2014 - $pos_current_total);
 		$pos_start_month = "July";
-		$pos_is_current = int(rand(2));
 		$pos_company = $pos_company_arr[int(rand(10))];
 
 
@@ -144,10 +154,10 @@ for (my $i = 0; $i < 10; $i++)
           <id>$pos_id</id>
           <title>$pos_title</title>
           <start-date>
-            <year>2012</year>
-            <month>August</month>
+            <year>$pos_start_year</year>
+            <month>$pos_start_month</month>
           </start-date>
-          <is-current>true</is-current>
+          <is-current>$pos_is_current</is-current>
           <company>
             <name>$pos_company</name>
           </company>
@@ -155,19 +165,29 @@ for (my $i = 0; $i < 10; $i++)
 ";
 	}
 
+print "Current year is : 2014 - $pos_current_total\n";
+
+
 	print RAND10 "      </positions>
       <educations total=\"$ed_total\">
 ";
 
+
+	$ed_current_degree = $ed_total;
+	
 	for (my $num_ed = 0; $num_ed < $ed_total; $num_ed++)
 	{
-
+		
 		$ed_id = int(rand(9999));
 		$ed_school = $ed_school_arr[int(rand(10))];
-#		$ed_start
-#		$ed_end
+		$ed_end = (2014 - $pos_current_total);
+		$pos_current_total += $degree_len_arr[$ed_current_degree]; 
+		$ed_start = (2014 - $pos_current_total);
 		$ed_degree = $ed_degree_arr[($ed_total - $num_ed)];
+		$ed_current_degree--;
 
+print "NOTE: current length of degree is $degree_len_arr[$ed_current_degree]\n";
+print "NOTE: current start date of degree is $ed_start\n";
 
 
 		print RAND10 "        <education>
@@ -175,10 +195,10 @@ for (my $i = 0; $i < 10; $i++)
           <school-name>$ed_school</school-name>
           <degree>$ed_degree</degree>
           <start-date>
-            <year>2006</year>
+            <year>$ed_start</year>
           </start-date>
           <end-date>
-            <year>2010</year>
+            <year>$ed_end</year>
           </end-date>
         </education>
 ";
