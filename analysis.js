@@ -58,13 +58,24 @@ function main() {
 
   // How Many Software Engineers
 
-  drawChart("How Many Software Engineers", [
-    ['string', 'Topping'],
-    ['number', 'Slices']
-  ], [
-    ['Software Engineers', 3],
-    ['Total Employees', 1],
-  ], PIE_CHART, 'chart01_div');
+  // drawChart("How Many Software Engineers", [
+  //   ['string', 'Topping'],
+  //   ['number', 'Slices']
+  // ], [
+  //   ['Software Engineers', 3],
+  //   ['Total Employees', 1],
+  // ], PIE_CHART, 'chart01_div');
+
+    // What company did they come from
+  drawBarChart("Ratio of Software Engineers",
+  	[['string', 'Year'],
+  	 ['number', 'Software Engineers'],
+  	 ['number', 'Total Employees']],
+   [['2011',  12000, 28000],
+    ['2012',  14000, 32000],
+    ['2013',  19000, 46000],
+    ['2014',  29000, 55000]],
+     'chart01_div');
 
   // Average working years in current employees
   drawChart("Average working years in current employees", [
@@ -104,18 +115,17 @@ function main() {
     ['CMU', 1],
     ['UIUC', 1],
     ['Others', 1]
-  ], PIE_CHART, 'chart04_div');
+  ], PIE_CHART, 'chart05_div');
 
   // What company did they come from
-  drawChart("What company did they come from", [
-    ['string', 'Topping'],
-    ['number', 'Slices']
-  ], [
-    ['Pinterest', 3],
-    ['LinkedIn', 1],
-    ['LinkedIn', 1],
-    ['LinkedIn', 1]
-  ], PIE_CHART, 'chart07_div');
+  drawBarChart("What companies did they come from",
+  	[['string', 'Past Companies'],
+  	 ['number', 'Companies']],
+   [['Amazon',  1000],
+    ['Facebook',  1170],
+    ['LinkedIn',  660],
+    ['Adobe',  1030]],
+     'chart04_div');
 
   // Average working years in Past employees
   drawChart("Average working years in Past employees", [
@@ -124,7 +134,7 @@ function main() {
   ], [
     ['Software Engineers', 3],
     ['Total Employees', 1],
-  ], PIE_CHART, 'chart05_div');
+  ], PIE_CHART, 'chart06_div');
 
 
   // Working years distribution in past employees
@@ -138,17 +148,17 @@ function main() {
     ['4 yrs', 1],
     ['5 yrs', 1],
     ['more than 5 yrs', 1],
-  ], PIE_CHART, 'chart06_div');
-
-
-  // What company did they go to
-  drawChart("What company did they go to", [
-    ['string', 'Topping'],
-    ['number', 'Slices']
-  ], [
-    ['Software Engineers', 3],
-    ['Total Employees', 1],
   ], PIE_CHART, 'chart07_div');
+
+
+  // // What company did they go to
+  // drawChart("What company did they go to", [
+  //   ['string', 'Topping'],
+  //   ['number', 'Slices']
+  // ], [
+  //   ['Software Engineers', 3],
+  //   ['Total Employees', 1],
+  // ], PIE_CHART, 'chart07_div');
 }
 
 
@@ -176,4 +186,25 @@ function drawChart(title, columns, rows, chartType, div) {
     chart.draw(data, options);
   }
 
+}
+
+
+function drawBarChart(title, columns, rows, div){
+
+	// Create the data table.
+	var data = new google.visualization.DataTable();
+	for(var i=0;i<columns.length;i++)
+	{
+		data.addColumn(columns[i][0], columns[i][1]);
+	}
+	data.addRows(rows);
+
+	var options = {
+	  title: title,
+	  vAxis: {title: columns[0][1],  titleTextStyle: {color: 'red'}}
+	};
+
+	var chart = new google.visualization.BarChart(document.getElementById(div));
+
+	chart.draw(data, options);
 }
