@@ -253,17 +253,18 @@ function main() {
 	}*/
 
     var str = "";
+    str += '<h2>' + company.name + '</h2>';
     str += '<table style="width:100%">';
-    str += '<tr><td><h3>name</h3></td>';
+    str += '<tr>';
     for (var i = 0; i < keyCount; i++) {
-      str += '<td><h3>' + keys[i] + '</h3></td>';
+      str += '<td><h4>' + keys[i] + '</h4></td>';
     }
-    str += '</tr><tr><td>' + company.name + '</td>';
+    str += '</tr>';
     for (var i = 0; i < keyCount; i++) {
       str += '<td>' + company.about[keys[i]] + '</td>';
     }
     str += '</tr>';
-    str += '<tr><td valign = "top"><h3>summary</h3></td><td colspan="3" align="left">' + company.desc + '</td></tr></table>'
+    str += '<tr><td valign = "top"><h4>summary</h4></td><td colspan="2" align="left">' + company.desc + '</td></tr></table>'
     $('#desc_list').append(str);
 
   };
