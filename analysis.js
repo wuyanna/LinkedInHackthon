@@ -156,6 +156,8 @@ function main() {
     drawCurrentWorkYearDistribution(people);
 
     drawPastWorkYearDistribution(people);
+
+    drawGraduateSchoolDistribution(people);
   };
 
   var showCompanyInfo = function(company) {
@@ -248,7 +250,38 @@ function main() {
       ['number', 'Slices']
     ], rows, PIE_CHART, 'chart07_div');
 
-  }
+  };
+
+  var drawGraduateSchoolDistribution = function(people) { 
+    var schoolMap = {};
+	var getGraduateSchoolDistribution = function(p) {
+	  for (var person in p){
+		for (var school in p[person].educations){
+		  if (schoolMap[p[person].educations[school].school] === undefined && p[person].positions[school].is_current === "true") {
+			schoolMap[p[person].educations[school].school] = 1;
+		  } else {
+			schoolMap[p[person].educations[school].school] = schoolMap[p[person].educations[school].school] + 1;
+		  }
+		}
+	  }
+	
+	  var rows = [];
+	  for (var key in schoolMap){
+	    var entry = [];
+	    entry[0] = key;
+	    entry[1] = schoolMap[key];
+	    rows.push(entry);
+	  }
+	  return rows;
+    };
+	
+    var rows = getGraduateSchoolDistribution(people);
+	
+    drawChart("Graduate School Distribution in Current Employees", [
+      ['string', 'Topping'],
+      ['number', 'Slices']
+    ], rows, PIE_CHART, 'chart05_div');
+  };
 
 
 
@@ -291,19 +324,6 @@ function main() {
     ['more than 5 yrs', 1],
   ], PIE_CHART, 'chart02_div');
 
-
-
-  // Graduation Schools distribution in current employees
-  drawChart("Graduation Schools distribution in current employees", [
-    ['string', 'Topping'],
-    ['number', 'Slices']
-  ], [
-    ['Stanford', 3],
-    ['MIT', 1],
-    ['CMU', 1],
-    ['UIUC', 1],
-    ['Others', 1]
-  ], PIE_CHART, 'chart05_div');
 
   // What company did they come from
   drawBarChart("What companies did they come from", [
