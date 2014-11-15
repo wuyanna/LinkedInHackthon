@@ -12,7 +12,7 @@ open(FNAMES, '<', "/Users/Shannon/devHer/firstnames") or die "Couldn't open firs
 open(LNAMES, '<', "/Users/Shannon/devHer/lastnames") or die "Couldn't open last names, $!";
 
 
-my ($rand_title, $rand_ed, $pos_max_len, $pos_len, $pos_yr_sum, $pos_current_total, $ed_current_degree, $profile_id, $f_name, $l_name, $pos_total, $pos_id, $pos_title, $pos_start_year, $pos_start_month, $pos_is_current, $pos_company, $ed_total, $ed_id, $ed_school, $ed_degree, $ed_start, $ed_end);
+my ($rand_title, $rand_ed, $pos_max_len, $pos_len, $pos_yr_sum, $pos_current_total, $ed_current_degree, $profile_id, $f_name, $l_name, $pos_total, $pos_id, $pos_title, $pos_end_year, $pos_start_year, $pos_start_month, $pos_is_current, $pos_company, $ed_total, $ed_id, $ed_school, $ed_degree, $ed_start, $ed_end);
 
 my @pos_title_arr = ("Software Engineer", "Product Manager", "Project Manager", "Quality Assurance Engineer");
 
@@ -144,6 +144,7 @@ for (my $i = 0; $i < 1000; $i++)
 
 			
 		$pos_id = int(rand(999999));
+		$pos_end_year = (2014 - $pos_current_total);
 		$pos_current_total += $pos_len_arr[$num_pos];
 		$pos_start_year = (2014 - $pos_current_total);
 		$pos_start_month = "July";
@@ -157,6 +158,9 @@ for (my $i = 0; $i < 1000; $i++)
             <year>$pos_start_year</year>
             <month>$pos_start_month</month>
           </start-date>
+          <end-date>
+            <year>$pos_end_year</year>
+          </end-date>
           <is-current>$pos_is_current</is-current>
           <company>
             <name>$pos_company</name>

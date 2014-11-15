@@ -185,6 +185,7 @@ function main() {
 
     drawGraduateSchoolDistribution(current_employees);
 
+    drawDegreeDistribution(current_employees);
     drawWhereDidCurrentEmployeesComeFrom(current_employees);
 
 
@@ -335,11 +336,11 @@ function main() {
   };
 
   var showAveragePastWorkYears = function(avg) {
-    $('#chart07_div').append("<p class='datalbl'>Average working years in Past employees: " + avg + "</p>");
+    $('#chart07_div').append("<p class='datalbl'>Average working years in Past employees: " + avg.toFixed(1) + "</p>");
   };
 
   var showAverageCurrnetWorkYears = function(avg) {
-    $('#chart03_div').append("<p class='datalbl'>Average working years in current employees: " + avg + "</p>");
+    $('#chart03_div').append("<p class='datalbl'>Average working years in current employees: " + avg.toFixed(1) + "</p>");
   };
 
 
@@ -396,7 +397,10 @@ function main() {
             maxDegree = Math.max(DEGREE_PHD, maxDegree);
           }
         }
+        degreeMap[maxDegree] = degreeMap[maxDegree] + 1;
       };
+
+
 
       var degreeToString = ["No degree", "Bachelor", "Master", "PhD"];
       var rows = [];
@@ -509,7 +513,7 @@ function main() {
               totalEmployees[year] = 0;
             totalEmployees[year] = totalEmployees[year] + 1;
             //check interval between start_date && end_date
-            if (position.title.indexOf("Software Developer") != -1) {
+            if (position.title.indexOf("Software Engineer") != -1) {
               if (!(year in softwareEnggs))
                 softwareEnggs[year] = 0;
               softwareEnggs[year] = softwareEnggs[year] + 1;
@@ -531,7 +535,7 @@ function main() {
     }
 
     // What company did they come from
-    drawBarChart("Ratio of Software Engineers in Recent 5 years", chartData, data,
+    drawBarChart("Ratio of Software Engineers in Recent 5 years", chartData, data.slice(data.length - 5, data.length),
       'chart01_div');
 
   }
