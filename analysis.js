@@ -28,7 +28,7 @@ function main() {
   // Load Company Data
   var company = {};
   // For prototype, we use dummy data in an XML
-  $.get('twitter.xml', function(myContentFile) {
+  $.get('linkedin.xml', function(myContentFile) {
 
     company.about = {};
     xmlDoc = $.parseXML(myContentFile),
