@@ -7,6 +7,8 @@ var oauth_user_secret = "75184e04-f293-481a-beca-ec71f6c37287";
 var BAR_CHART = 1;
 var PIE_CHART = 2;
 
+var linkedInAuth = false;
+
 // Load the Visualization API and the piechart package.
 google.load('visualization', '1.0', {
   'packages': ['corechart']
@@ -16,7 +18,6 @@ google.load('visualization', '1.0', {
 google.setOnLoadCallback(main);
 
 function main() {
-
 
   // Load Company Data
   var company = {};
@@ -41,13 +42,13 @@ function main() {
     $xml.find('founded-year').each(function() {
       company.about.founded = $(this).text();
     });
-    $xml.find('company > name').each(function () {
+    $xml.find('company > name').each(function() {
       company.name = $(this).text();
     });
     showCompanyInfo(company);
   }, 'text');
 
-  $.get('sample_data.xml', function(myContentFile) {
+  $.get('random10txt.txt', function(myContentFile) {
     var people = [];
     xmlDoc = $.parseXML(myContentFile),
     $xml = $(xmlDoc),
@@ -158,9 +159,6 @@ function main() {
 
     drawPastWorkYearDistribution(people);
 
-
-    drawGraduateSchoolDistribution(people);
-
     var current_employees = people.filter(function(person) {
       for (var position in person.positions) {
         if (person.positions[position].is_current === "true" && person.positions[position].company === company.name) {
@@ -179,11 +177,13 @@ function main() {
       return false;
     });
 
+    drawGraduateSchoolDistribution(current_employees);
+
     drawWhereDidCurrentEmployeesComeFrom(current_employees);
 
 
-  	//Bar chart for software engineers ratio
-  	renderSoftwareEnggRatio(people);
+    //Bar chart for software engineers ratio
+    renderSoftwareEnggRatio(people);
 
 
     drawWhereDoPastEmployeesGo(past_employees);
@@ -241,113 +241,174 @@ function main() {
     
   };
 
-  var drawCurrentWorkYearDistribution = function(people) {
+  var drawCurrentWorkYearDistribution = function(p) {
 
-    var getCurrentWorkYearsDistribution = function(p) {
-      var yearMap = [];
-      var maxYears = 0;
-      for (var person in p) {
-        for (var position in p[person].positions) {
-          if (p[person].positions[position].company === company.name && p[person].positions[position].is_current === "true") {
-            var years = getDurationTillNow(p[person].positions[position].start_date);
-            if (yearMap[years] === undefined) {
-              yearMap[years] = 1;
-            } else {
-              yearMap[years] = yearMap[years] + 1;
-            }
-            maxYears = Math.max(years, maxYears);
+    var yearMap = [];
+    var maxYears = 0;
+    for (var person in p) {
+      for (var position in p[person].positions) {
+        if (p[person].positions[position].company === company.name && p[person].positions[position].is_current === "true") {
+          var years = getDurationTillNow(p[person].positions[position].start_date);
+          if (yearMap[years] === undefined) {
+            yearMap[years] = 1;
+          } else {
+            yearMap[years] = yearMap[years] + 1;
           }
+          maxYears = Math.max(years, maxYears);
         }
       }
+    }
 
-      var rows = [];
-      for (var i = 0; i <= maxYears; i++) {
-        var entry = [];
-        entry[0] = "" + i + "yrs";
-        entry[1] = yearMap[i];
-        rows.push(entry);
-      }
+    var rows = [];
+    var sum = 0;
+    var count = 0;
+    var avg = 0;
+    for (var i = 0; i <= maxYears; i++) {
+      var entry = [];
+      entry[0] = "" + i + "yrs";
+      entry[1] = yearMap[i] === undefined ? 0 : yearMap[i];
+      rows.push(entry);
+      sum += (i * entry[1]);
+      count += entry[1];
+    }
 
-      return rows;
-    };
+    if (count > 0) {
+      avg = sum / count;
+    }
 
-    var rows = getCurrentWorkYearsDistribution(people);
     // Working years distribution in current employees
     drawChart("Working years distribution in current employees", [
       ['string', 'Topping'],
       ['number', 'Slices']
     ], rows, PIE_CHART, 'chart03_div');
+    showAverageCurrnetWorkYears(avg);
   };
 
-  var drawPastWorkYearDistribution = function(people) {
+  var drawPastWorkYearDistribution = function(p) {
 
-    var getPastWorkYearsDistribution = function(p) {
-      var yearMap = [];
-      var maxYears = 0;
-      for (var person in p) {
-        for (var position in p[person].positions) {
-          if (p[person].positions[position].company === company.name && p[person].positions[position].is_current === "false") {
-            var years = getDuration(p[person].positions[position].start_date, p[person].positions[position].end_date);
-            if (yearMap[years] === undefined) {
-              yearMap[years] = 1;
-            } else {
-              yearMap[years] = yearMap[years] + 1;
-            }
-            maxYears = Math.max(years, maxYears);
+    var yearMap = [];
+    var maxYears = 0;
+    for (var person in p) {
+      for (var position in p[person].positions) {
+        if (p[person].positions[position].company === company.name && p[person].positions[position].is_current === "false") {
+          var years = getDuration(p[person].positions[position].start_date, p[person].positions[position].end_date);
+          if (yearMap[years] === undefined) {
+            yearMap[years] = 1;
+          } else {
+            yearMap[years] = yearMap[years] + 1;
           }
+          maxYears = Math.max(years, maxYears);
         }
       }
+    }
 
-      var rows = [];
-      for (var i = 0; i <= maxYears; i++) {
-        var entry = [];
-        entry[0] = "" + i + "yrs";
-        entry[1] = yearMap[i];
-        rows.push(entry);
-      }
+    var rows = [];
+    var sum = 0;
+    var count = 0;
+    var avg = 0;
+    for (var i = 0; i <= maxYears; i++) {
+      var entry = [];
+      entry[0] = "" + i + "yrs";
+      entry[1] = yearMap[i] === undefined ? 0 : yearMap[i];
+      rows.push(entry);
+      sum += (i * entry[1]);
+      count += entry[1];
+    }
 
-      return rows;
-    };
-
-    var rows = getPastWorkYearsDistribution(people);
+    if (count > 0) {
+      avg = sum / count;
+    }
     // Working years distribution in past employees
     drawChart("Working years distribution in past employees", [
       ['string', 'Topping'],
       ['number', 'Slices']
     ], rows, PIE_CHART, 'chart07_div');
 
+    showAveragePastWorkYears(avg);
+
+  };
+
+  var showAveragePastWorkYears = function(avg) {
+    $('#chart07_div').append("<p class='datalbl'>Average working years in Past employees: " + avg + "</p>");
+  };
+
+  var showAverageCurrnetWorkYears = function(avg) {
+    $('#chart03_div').append("<p class='datalbl'>Average working years in current employees: " + avg + "</p>");
   };
 
 
-  var drawGraduateSchoolDistribution = function(people) { 
+  var drawGraduateSchoolDistribution = function(people) {
     var schoolMap = {};
-	var getGraduateSchoolDistribution = function(p) {
-	  for (var person in p){
-		for (var school in p[person].educations){
-		  if (schoolMap[p[person].educations[school].school] === undefined && p[person].positions[school].is_current === "true") {
-			schoolMap[p[person].educations[school].school] = 1;
-		  } else {
-			schoolMap[p[person].educations[school].school] = schoolMap[p[person].educations[school].school] + 1;
-		  }
-		}
-	  }
-	
-	  var rows = [];
-	  for (var key in schoolMap){
-	    var entry = [];
-	    entry[0] = key;
-	    entry[1] = schoolMap[key];
-	    rows.push(entry);
-	  }
-	  return rows;
+    var getGraduateSchoolDistribution = function(p) {
+      for (var person in p) {
+        for (var school in p[person].educations) {
+          if (schoolMap[p[person].educations[school].school] === undefined) {
+            schoolMap[p[person].educations[school].school] = 1;
+          } else {
+            schoolMap[p[person].educations[school].school] = schoolMap[p[person].educations[school].school] + 1;
+          }
+        }
+      }
+
+      var rows = [];
+      for (var key in schoolMap) {
+        var entry = [];
+        entry[0] = key;
+        entry[1] = schoolMap[key];
+        rows.push(entry);
+      }
+      return rows;
     };
-	
+
     var rows = getGraduateSchoolDistribution(people);
-	
+
     drawChart("Graduate School Distribution in Current Employees", [
       ['string', 'Topping'],
       ['number', 'Slices']
     ], rows, PIE_CHART, 'chart05_div');
+  };
+
+  var drawDegreeDistribution = function(people) {
+    var degreeMap = [];
+    var DEGREE_NO = 0;
+    var DEGREE_BS = 1;
+    var DEGREE_MS = 2;
+    var DEGREE_PHD = 3;
+    for (var i = DEGREE_NO; i <= DEGREE_PHD; i++) {
+      degreeMap[i] = 0;
+    }
+
+    var getDegreeDistribution = function(p) {
+      for (var person in p) {
+        var maxDegree = DEGREE_NO; // -1: no degree; 0: bachela; 1: master; 2: phd
+        for (var edu in p[person].educations) {
+          if (p[person].educations[edu].degree.indexOf('Bachelor') != -1) {
+            maxDegree = Math.max(DEGREE_BS, maxDegree);
+          } else if (p[person].educations[edu].degree.indexOf('Master') != -1) {
+            maxDegree = Math.max(DEGREE_MS, maxDegree);
+          } else if (p[person].educations[edu].degree.indexOf('PhD') != -1) {
+            maxDegree = Math.max(DEGREE_PHD, maxDegree);
+          }
+        }
+      };
+
+      var degreeToString = ["No degree", "Bachelor", "Master", "PhD"];
+      var rows = [];
+      for (var key in degreeMap) {
+        var entry = [];
+        entry[0] = degreeToString[key];
+        entry[1] = degreeMap[key];
+        rows.push(entry);
+      }
+      return rows;
+    };
+
+    var rows = getDegreeDistribution(people);
+
+    drawChart("Degree Distribution in Current Employees", [
+      ['string', 'Topping'],
+      ['number', 'Slices']
+    ], rows, PIE_CHART, 'chart02_div');
   };
 
   var drawWhereDidCurrentEmployeesComeFrom = function(p) {
@@ -415,105 +476,59 @@ function main() {
   };
 
   var renderSoftwareEnggRatio = function(people) {
-	//Render bar chart for sofware engineer ratio
+    //Render bar chart for sofware engineer ratio
 
-	var chartData = [];
-	chartData.push(['string', 'Year']);
-	chartData.push(['number', 'Software Engineers']);
-	chartData.push(['number', 'Total Employees']);
-	
-	var softwareEnggs = {};
-	var totalEmployees = {};
+    var chartData = [];
+    chartData.push(['string', 'Year']);
+    chartData.push(['number', 'Software Engineers']);
+    chartData.push(['number', 'Total Employees']);
 
-	for(var i=0;i<people.length;i++)
-	{	
-	 	var person = people[i];
-	 	var positions = person.positions;
-	 	for(var j=0;j<positions.length;j++)
-		{
-			var position = positions[j];
+    var softwareEnggs = {};
+    var totalEmployees = {};
 
-			if(position.company===company.name)
-			{
-				var end_year;
-				if(jQuery.isEmptyObject(position.end_date))
-					end_year = new Date().getFullYear();
-				else
-					end_year = position.end_date.year;
-				for(var year=parseInt(position.start_date.year);year<=end_year;year++)
-				{
-					if(!(year in totalEmployees))
-						totalEmployees[year]=0;
-					totalEmployees[year] = totalEmployees[year] + 1;
-					//check interval between start_date && end_date
-					if(position.title.indexOf("Software Developer")!=-1)
-					{
-						if(!(year in softwareEnggs))
-							softwareEnggs[year]=0;						
-						softwareEnggs[year] = softwareEnggs[year] + 1;
-					}
-				}
-			}
-		}
-     }
+    for (var i = 0; i < people.length; i++) {
+      var person = people[i];
+      var positions = person.positions;
+      for (var j = 0; j < positions.length; j++) {
+        var position = positions[j];
 
-   //Build data array for bar chart
-   var data = [];
+        if (position.company === company.name) {
+          var end_year;
+          if (jQuery.isEmptyObject(position.end_date))
+            end_year = new Date().getFullYear();
+          else
+            end_year = position.end_date.year;
+          for (var year = parseInt(position.start_date.year); year <= end_year; year++) {
+            if (!(year in totalEmployees))
+              totalEmployees[year] = 0;
+            totalEmployees[year] = totalEmployees[year] + 1;
+            //check interval between start_date && end_date
+            if (position.title.indexOf("Software Developer") != -1) {
+              if (!(year in softwareEnggs))
+                softwareEnggs[year] = 0;
+              softwareEnggs[year] = softwareEnggs[year] + 1;
+            }
+          }
+        }
+      }
+    }
 
-   for(var year in totalEmployees)
-   {	
-   	 var softwareEnggsNumber = 0;
-   	 if(softwareEnggs[year]!==undefined)
-   	 	softwareEnggsNumber = softwareEnggs[year];
-   	 var totalEmployeesNumber = totalEmployees[year];
-   	 data.push([year,softwareEnggs[year],totalEmployees[year]]);
-   }
+    //Build data array for bar chart
+    var data = [];
 
-	  // What company did they come from
-  drawBarChart("Ratio of Software Engineers", chartData, data,
-    'chart01_div');
+    for (var year in totalEmployees) {
+      var softwareEnggsNumber = 0;
+      if (softwareEnggs[year] !== undefined)
+        softwareEnggsNumber = softwareEnggs[year];
+      var totalEmployeesNumber = totalEmployees[year];
+      data.push([year, softwareEnggs[year], totalEmployees[year]]);
+    }
+
+    // What company did they come from
+    drawBarChart("Ratio of Software Engineers in Recent 5 years", chartData, data,
+      'chart01_div');
 
   }
-
-  // Load People Search Result
-  // For prototype, we use dummy data in an XML
-
-  // How Many Software Engineers
-
-  // drawChart("How Many Software Engineers", [
-  //   ['string', 'Topping'],
-  //   ['number', 'Slices']
-  // ], [
-  //   ['Software Engineers', 3],
-  //   ['Total Employees', 1],
-  // ], PIE_CHART, 'chart01_div');
-
-
-
-  // Average working years in current employees
-  drawChart("Average working years in current employees", [
-    ['string', 'Topping'],
-    ['number', 'Slices']
-  ], [
-    ['1 yr', 3],
-    ['2 yrs', 1],
-    ['3 yrs', 1],
-    ['4 yrs', 1],
-    ['5 yrs', 1],
-    ['more than 5 yrs', 1],
-  ], PIE_CHART, 'chart02_div');
-
-
-
-
-  // Average working years in Past employees
-  drawChart("Average working years in Past employees", [
-    ['string', 'Topping'],
-    ['number', 'Slices']
-  ], [
-    ['Software Engineers', 3],
-    ['Total Employees', 1],
-  ], PIE_CHART, 'chart06_div');
 
 }
 
@@ -543,6 +558,7 @@ function drawChart(title, columns, rows, chartType, div) {
   }
 
 }
+
 
 
 function drawBarChart(title, columns, rows, div) {
@@ -580,3 +596,28 @@ function getDuration(start, end) {
   }
   return parseInt(end.year) - parseInt(start.year);
 }
+
+function onLinkedInLoad() {
+
+console.log("LOADED");
+
+   // Listen for an auth event to occur
+   IN.Event.on(IN, "auth", onLinkedInAuth);
+}
+
+function onLinkedInAuth() {
+
+linkedInAuth = true;
+console.log("LinkedIn Auth");
+
+//Fetching company data from LinkedIn Company API
+// $.get(
+// "https://api.linkedin.com/v1/companies/universal-name=linkedin",
+// {},
+// function(data) {
+//    alert('page content: ' + data);
+// }
+// );
+
+// var a = 5;
+}   
