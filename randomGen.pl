@@ -16,7 +16,7 @@ my ($rand_title, $rand_ed, $pos_max_len, $pos_len, $pos_yr_sum, $pos_current_tot
 
 my @pos_title_arr = ("Software Engineer", "Product Manager", "Project Manager", "Quality Assurance Engineer");
 
-my @pos_company_arr = ("Google", "LinkedIn", "Twitter", "Cisco", "Apple", "Facebook", "Oracle", "Intel", "Hewlett-Packard", "Yahoo!");
+my @pos_company_arr = ("Google", "LinkedIn", "Twitter", "Cisco", "Apple", "Facebook", "Oracle", "Intel Corporation", "Hewlett-Packard", "Yahoo");
 
 my @ed_school_arr = ("Carnegie Mellon University", "Massachusetts Institute of Technology", "Stanford University", "University of California, Berkeley", "University of Illinois, Urbana-Champaign", "Cornell University", "University of Washington", "Stanford", "Georgia Institute of Technology", "California Institute of Technology");
 
