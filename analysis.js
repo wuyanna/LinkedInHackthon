@@ -24,19 +24,19 @@ function main() {
     company.about = {};
     xmlDoc = $.parseXML(myContentFile),
     $xml = $(xmlDoc),
-    $xml.find('logo-url').each(function () {
+    $xml.find('logo-url').each(function() {
       company.logo = $(this).text();
     });
-    $xml.find('description').each(function () {
+    $xml.find('description').each(function() {
       company.desc = $(this).text();
     });
-    $xml.find('website-url').each(function () {
+    $xml.find('website-url').each(function() {
       company.about.website = $(this).text();
     });
-    $xml.find('industry > name').each(function () {
+    $xml.find('industry > name').each(function() {
       company.about.industry = $(this).text();
     });
-    $xml.find('founded-year').each(function () {
+    $xml.find('founded-year').each(function() {
       company.about.founded = $(this).text();
     });
     $xml.find('name').each(function () {
@@ -49,39 +49,122 @@ function main() {
     var people = [];
     xmlDoc = $.parseXML(myContentFile),
     $xml = $(xmlDoc),
-    $xml.find('logo-url').each(function () {
-      company.logo = $(this).text();
-    });
-    $xml.find('description').each(function () {
-      company.desc = $(this).text();
-    });
-    $xml.find('website-url').each(function () {
-      company.about.website = $(this).text();
-    });
-    $xml.find('industry > name').each(function () {
-      company.about.industry = $(this).text();
-    });
-    $xml.find('founded-year').each(function () {
-      company.about.founded = $(this).text();
+    $xml.find('person').each(function() {
+      var person = {};
+      $(this).find('id').each(function() {
+        person.id = $(this).text();
+      });
+
+      $(this).find('first-name').each(function() {
+        person.firstname = $(this).text();
+      });
+
+      $(this).find('last-name').each(function() {
+        person.lastname = $(this).text();
+      });
+
+      var positions = [];
+
+
+      $(this).find('position').each(function() {
+        var position = {};
+        $(this).find('id').each(function() {
+          position.id = $(this).text();
+        });
+        $(this).find('title').each(function() {
+          position.title = $(this).text();
+        });
+        var start_date = {};
+
+        $(this).find('start-date > year').each(function() {
+          start_date.year = $(this).text();
+        });
+        $(this).find('start-date > month').each(function() {
+          start_date.month = $(this).text();
+        });
+        position.start_date = start_date;
+
+        var end_date = {};
+
+        $(this).find('end-date > year').each(function() {
+          end_date.year = $(this).text();
+        });
+
+        $(this).find('end-date > month').each(function() {
+          end_date.month = $(this).text();
+        });
+        position.end_date = end_date;
+
+        $(this).find('is-current').each(function() {
+          position.is_current = $(this).text();
+        });
+
+        $(this).find('company > name').each(function() {
+          position.company = $(this).text();
+        });
+        positions.push(position);
+      });
+      person.positions = positions;
+
+      var educations = [];
+
+      $(this).find('education').each(function() {
+        var education = {};
+        $(this).find('id').each(function() {
+          education.id = $(this).text();
+        });
+        $(this).find('school-name').each(function() {
+          education.school = $(this).text();
+        });
+        $(this).find('degree').each(function() {
+          education.degree = $(this).text();
+        });
+        var start_date = {};
+
+        $(this).find('start-date > year').each(function() {
+          start_date.year = $(this).text();
+        });
+        $(this).find('start-date > month').each(function() {
+          start_date.month = $(this).text();
+        });
+        education.start_date = start_date;
+
+        var end_date = {};
+
+        $(this).find('end-date > year').each(function() {
+          end_date.year = $(this).text();
+        });
+
+        $(this).find('end-date > month').each(function() {
+          end_date.month = $(this).text();
+        });
+
+        education.end_date = end_date;
+
+        educations.push(education);
+      });
+      person.educations = educations;
+
+      people.push(person);
     });
 
     renderGraphs(people);
   }, 'text');
 
-  var renderGraphs = function (people) {
+  var renderGraphs = function(people) {
 
   	//Bar chart for software engineers ratio
   	renderSoftwareEnggRatio(people);
 
   };
 
-  var showCompanyInfo = function (company) {
+  var showCompanyInfo = function(company) {
     $("#logo").attr("src", company.logo);
 
     for (var key in company.about) {
       $('#desc_list').append('<li class="aboutlist"><h4>' + key + '</h4><p>' + company.about[key] + '</p></li>')
     }
-    
+
   };
 
   var renderSoftwareEnggRatio = function(people) {
@@ -117,16 +200,18 @@ function main() {
   //   ['Total Employees', 1],
   // ], PIE_CHART, 'chart01_div');
 
-    // What company did they come from
-  drawBarChart("Ratio of Software Engineers",
-  	[['string', 'Year'],
-  	 ['number', 'Software Engineers'],
-  	 ['number', 'Total Employees']],
-   [['2011',  12000, 28000],
-    ['2012',  14000, 32000],
-    ['2013',  19000, 46000],
-    ['2014',  29000, 55000]],
-     'chart01_div');
+  // What company did they come from
+  drawBarChart("Ratio of Software Engineers", [
+      ['string', 'Year'],
+      ['number', 'Software Engineers'],
+      ['number', 'Total Employees']
+    ], [
+      ['2011', 12000, 28000],
+      ['2012', 14000, 32000],
+      ['2013', 19000, 46000],
+      ['2014', 29000, 55000]
+    ],
+    'chart01_div');
 
   // Average working years in current employees
   drawChart("Average working years in current employees", [
@@ -169,14 +254,16 @@ function main() {
   ], PIE_CHART, 'chart05_div');
 
   // What company did they come from
-  drawBarChart("What companies did they come from",
-  	[['string', 'Past Companies'],
-  	 ['number', 'Companies']],
-   [['Amazon',  1000],
-    ['Facebook',  1170],
-    ['LinkedIn',  660],
-    ['Adobe',  1030]],
-     'chart04_div');
+  drawBarChart("What companies did they come from", [
+      ['string', 'Past Companies'],
+      ['number', 'Companies']
+    ], [
+      ['Amazon', 1000],
+      ['Facebook', 1170],
+      ['LinkedIn', 660],
+      ['Adobe', 1030]
+    ],
+    'chart04_div');
 
   // Average working years in Past employees
   drawChart("Average working years in Past employees", [
@@ -240,22 +327,26 @@ function drawChart(title, columns, rows, chartType, div) {
 }
 
 
-function drawBarChart(title, columns, rows, div){
+function drawBarChart(title, columns, rows, div) {
 
-	// Create the data table.
-	var data = new google.visualization.DataTable();
-	for(var i=0;i<columns.length;i++)
-	{
-		data.addColumn(columns[i][0], columns[i][1]);
-	}
-	data.addRows(rows);
+  // Create the data table.
+  var data = new google.visualization.DataTable();
+  for (var i = 0; i < columns.length; i++) {
+    data.addColumn(columns[i][0], columns[i][1]);
+  }
+  data.addRows(rows);
 
-	var options = {
-	  title: title,
-	  vAxis: {title: columns[0][1],  titleTextStyle: {color: 'red'}}
-	};
+  var options = {
+    title: title,
+    vAxis: {
+      title: columns[0][1],
+      titleTextStyle: {
+        color: 'red'
+      }
+    }
+  };
 
-	var chart = new google.visualization.BarChart(document.getElementById(div));
+  var chart = new google.visualization.BarChart(document.getElementById(div));
 
-	chart.draw(data, options);
+  chart.draw(data, options);
 }
