@@ -61,20 +61,10 @@ for (my $i = 0; $i < 10; $i++)
 	$profile_id = int(rand(999999999));
 	$working_years = int(rand(30));
 	$pos_total = 1 + int(rand(7));
-	$pos_id = int(rand(999999));
 	$pos_title = $pos_title_arr[int(rand(4))];
-#	$pos_start_year  #calc based on working years
-	$pos_start_month = "July";
-	$pos_is_current = int(rand(2));
-	$pos_company = $pos_company_arr[int(rand(10))];
 	$ed_total = 1 + int(rand(3));
-	$ed_id = int(rand(9999));
-	$ed_school = $ed_school_arr[int(rand(10))];
-	$ed_degree = $ed_degree_arr[$ed_total];
-#	$ed_start
-#	$ed_end
 
-	print RAND10 "$f_name, $l_name, $profile_id, $pos_total, $pos_id, $pos_title, $pos_start_month, $pos_is_current, $pos_company, $ed_total, $ed_id, $ed_school, $ed_degree, $working_years\n";
+#	print RAND10 "$f_name, $l_name, $profile_id, $pos_total, $pos_id, $pos_title, $pos_start_month, $pos_is_current, $pos_company, $ed_total, $ed_id, $ed_school, $ed_degree, $working_years\n";
 
 
 	print RAND10 "    <person>
@@ -82,7 +72,19 @@ for (my $i = 0; $i < 10; $i++)
       <first-name>$f_name</first-name>
       <last-name>$l_name</last-name>
       <positions total=\"$pos_total\">
-        <position>
+";
+
+	for (my $num_pos = 0; $num_pos < $pos_total; $num_pos++)
+	{
+			
+		$pos_id = int(rand(999999));
+#		$pos_start_year  #calc based on working years
+		$pos_start_month = "July";
+		$pos_is_current = int(rand(2));
+		$pos_company = $pos_company_arr[int(rand(10))];
+
+
+		print RAND10 "        <position>
           <id>$pos_id</id>
           <title>$pos_title</title>
           <start-date>
@@ -94,21 +96,25 @@ for (my $i = 0; $i < 10; $i++)
             <name>$pos_company</name>
           </company>
         </position>
-        <position>
-          <id>test</id>
-          <title>test</title>
-          <start-date>
-            <year>test</year>
-            <month>test</month>
-          </start-date>
-          <is-current>test</is-current>
-          <company>
-            <name>test</name>
-          </company>
-        </position>
-      </positions>
+";
+	}
+
+	print RAND10 "      </positions>
       <educations total=\"$ed_total\">
-        <education>
+";
+
+	for (my $num_ed = 0; $num_ed < $ed_total; $num_ed++)
+	{
+
+		$ed_id = int(rand(9999));
+		$ed_school = $ed_school_arr[int(rand(10))];
+#		$ed_start
+#		$ed_end
+		$ed_degree = $ed_degree_arr[($ed_total - $num_ed)];
+
+
+
+		print RAND10 "        <education>
           <id>$ed_id</id>
           <school-name>$ed_school</school-name>
           <degree>$ed_degree</degree>
@@ -119,7 +125,9 @@ for (my $i = 0; $i < 10; $i++)
             <year>2010</year>
           </end-date>
         </education>
-      </educations>
+";
+	}
+		print RAND10 "      </educations>
     </person>
 ";
 }
