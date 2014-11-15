@@ -15,11 +15,42 @@ google.load('visualization', '1.0', {
 // Set a callback to run when the Google Visualization API is loaded.
 google.setOnLoadCallback(main);
 
-
 function main() {
   // Load Company Data
   // For prototype, we use dummy data in an XML
-  $("#logo").attr("src", "https://media.licdn.com/media/p/2/000/1c9/1c0/312af15.png");
+  $.get('linkedin.xml', function(myContentFile) {
+    var company = {};
+    company.about = {};
+    xmlDoc = $.parseXML(myContentFile),
+    $xml = $(xmlDoc),
+    $xml.find('logo-url').each(function () {
+      company.logo = $(this).text();
+    });
+    $xml.find('description').each(function () {
+      company.desc = $(this).text();
+    });
+    $xml.find('website-url').each(function () {
+      company.about.website = $(this).text();
+    });
+    $xml.find('industry > name').each(function () {
+      company.about.industry = $(this).text();
+    });
+    $xml.find('founded-year').each(function () {
+      company.about.founded = $(this).text();
+    });
+
+    showCompanyInfo(company);
+  }, 'text');
+
+  var showCompanyInfo = function (company) {
+    $("#logo").attr("src", company.logo);
+
+    for (var key in company.about) {
+      $('#desc_list').append('<li class="aboutlist"><h4>' + key + '</h4><p>' + company.about[key] + '</p></li>')
+    }
+    
+  };
+
 
 
   // Load People Search Result
