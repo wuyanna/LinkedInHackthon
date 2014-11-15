@@ -16,9 +16,10 @@ google.load('visualization', '1.0', {
 google.setOnLoadCallback(main);
 
 function main() {
-  var company = {};
+
 
   // Load Company Data
+  var company = {};
   // For prototype, we use dummy data in an XML
   $.get('linkedin.xml', function(myContentFile) {
 
@@ -40,7 +41,7 @@ function main() {
     $xml.find('founded-year').each(function() {
       company.about.founded = $(this).text();
     });
-    $xml.find('company > name').each(function() {
+    $xml.find('company > name').each(function () {
       company.name = $(this).text();
     });
     showCompanyInfo(company);
@@ -157,7 +158,37 @@ function main() {
 
     drawPastWorkYearDistribution(people);
 
+
     drawGraduateSchoolDistribution(people);
+
+    var current_employees = people.filter(function(person) {
+      for (var position in person.positions) {
+        if (person.positions[position].is_current === "true" && person.positions[position].company === company.name) {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    var past_employees = people.filter(function(person) {
+      for (var position in person.positions) {
+        if (person.positions[position].is_current === "true" && person.positions[position].company !== company.name) {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    drawWhereDidCurrentEmployeesComeFrom(current_employees);
+
+
+  	//Bar chart for software engineers ratio
+  	renderSoftwareEnggRatio(people);
+
+
+    drawWhereDoPastEmployeesGo(past_employees);
+
+
   };
 
   var showCompanyInfo = function(company) {
@@ -170,7 +201,7 @@ function main() {
     $('#desc_list').append('<table style="width:100%">')
     for (var key in company.about) {
       $('#desc_list').append(
-	    '<tr><td><h3>' + key + '</h3></td><td>' + company.about[key] + '</td></tr>')
+        '<tr><td><h3>' + key + '</h3></td><td>' + company.about[key] + '</td></tr>')
     }
     $('#desc_list').append('</table>')
   };
@@ -252,6 +283,7 @@ function main() {
 
   };
 
+
   var drawGraduateSchoolDistribution = function(people) { 
     var schoolMap = {};
 	var getGraduateSchoolDistribution = function(p) {
@@ -283,7 +315,130 @@ function main() {
     ], rows, PIE_CHART, 'chart05_div');
   };
 
+  var drawWhereDidCurrentEmployeesComeFrom = function(p) {
+    var pastCompanyMap = {};
+    for (var person in p) {
+      for (var position in p[person].positions) {
+        if (p[person].positions[position].company !== company.name && p[person].positions[position].is_current === "false") {
 
+          if (pastCompanyMap[p[person].positions[position].company] === undefined) {
+            pastCompanyMap[p[person].positions[position].company] = 1;
+          } else {
+            pastCompanyMap[p[person].positions[position].company] = pastCompanyMap[p[person].positions[position].company] + 1;
+          }
+        }
+      }
+    }
+
+    var rows = [];
+    for (var key in pastCompanyMap) {
+      var entry = [];
+      entry[0] = key;
+      entry[1] = pastCompanyMap[key];
+      rows.push(entry);
+    }
+
+    // What company did they come from
+    drawBarChart("What companies did they come from", [
+        ['string', 'Past Companies'],
+        ['number', 'Companies']
+      ], rows,
+      'chart08_div');
+
+  };
+
+  var drawWhereDoPastEmployeesGo = function(p) {
+    var curCompanyMap = {};
+    for (var person in p) {
+      for (var position in p[person].positions) {
+        if (p[person].positions[position].company !== company.name && p[person].positions[position].is_current === "true") {
+
+          if (curCompanyMap[p[person].positions[position].company] === undefined) {
+            curCompanyMap[p[person].positions[position].company] = 1;
+          } else {
+            curCompanyMap[p[person].positions[position].company] = curCompanyMap[p[person].positions[position].company] + 1;
+          }
+        }
+      }
+    }
+
+    var rows = [];
+    for (var key in curCompanyMap) {
+      var entry = [];
+      entry[0] = key;
+      entry[1] = curCompanyMap[key];
+      rows.push(entry);
+    }
+
+    drawBarChart("What companies do they work for", [
+        ['string', 'Past Companies'],
+        ['number', 'Companies']
+      ], rows,
+      'chart04_div');
+
+
+  };
+
+  var renderSoftwareEnggRatio = function(people) {
+	//Render bar chart for sofware engineer ratio
+
+	var chartData = [];
+	chartData.push(['string', 'Year']);
+	chartData.push(['number', 'Software Engineers']);
+	chartData.push(['number', 'Total Employees']);
+	
+	var softwareEnggs = {};
+	var totalEmployees = {};
+
+	for(var i=0;i<people.length;i++)
+	{	
+	 	var person = people[i];
+	 	var positions = person.positions;
+	 	for(var j=0;j<positions.length;j++)
+		{
+			var position = positions[j];
+
+			if(position.company===company.name)
+			{
+				var end_year;
+				if(jQuery.isEmptyObject(position.end_date))
+					end_year = new Date().getFullYear();
+				else
+					end_year = position.end_date.year;
+				for(var year=parseInt(position.start_date.year);year<=end_year;year++)
+				{
+					if(!(year in totalEmployees))
+						totalEmployees[year]=0;
+					totalEmployees[year] = totalEmployees[year] + 1;
+					//check interval between start_date && end_date
+					if(position.title.indexOf("Software Developer")!=-1)
+					{
+						if(!(year in softwareEnggs))
+							softwareEnggs[year]=0;						
+						softwareEnggs[year] = softwareEnggs[year] + 1;
+					}
+				}
+			}
+		}
+     }
+
+   //Build data array for bar chart
+   var data = [];
+
+   for(var year in totalEmployees)
+   {	
+   	 var softwareEnggsNumber = 0;
+   	 if(softwareEnggs[year]!==undefined)
+   	 	softwareEnggsNumber = softwareEnggs[year];
+   	 var totalEmployeesNumber = totalEmployees[year];
+   	 data.push([year,softwareEnggs[year],totalEmployees[year]]);
+   }
+
+	  // What company did they come from
+  drawBarChart("Ratio of Software Engineers", chartData, data,
+    'chart01_div');
+
+  }
 
   // Load People Search Result
   // For prototype, we use dummy data in an XML
@@ -298,18 +453,7 @@ function main() {
   //   ['Total Employees', 1],
   // ], PIE_CHART, 'chart01_div');
 
-  // What company did they come from
-  drawBarChart("Ratio of Software Engineers", [
-      ['string', 'Year'],
-      ['number', 'Software Engineers'],
-      ['number', 'Total Employees']
-    ], [
-      ['2011', 12000, 28000],
-      ['2012', 14000, 32000],
-      ['2013', 19000, 46000],
-      ['2014', 29000, 55000]
-    ],
-    'chart01_div');
+
 
   // Average working years in current employees
   drawChart("Average working years in current employees", [
@@ -325,17 +469,7 @@ function main() {
   ], PIE_CHART, 'chart02_div');
 
 
-  // What company did they come from
-  drawBarChart("What companies did they come from", [
-      ['string', 'Past Companies'],
-      ['number', 'Companies']
-    ], [
-      ['Amazon', 1000],
-      ['Facebook', 1170],
-      ['LinkedIn', 660],
-      ['Adobe', 1030]
-    ],
-    'chart04_div');
+
 
   // Average working years in Past employees
   drawChart("Average working years in Past employees", [
@@ -346,16 +480,6 @@ function main() {
     ['Total Employees', 1],
   ], PIE_CHART, 'chart06_div');
 
-
-
-  // // What company did they go to
-  // drawChart("What company did they go to", [
-  //   ['string', 'Topping'],
-  //   ['number', 'Slices']
-  // ], [
-  //   ['Software Engineers', 3],
-  //   ['Total Employees', 1],
-  // ], PIE_CHART, 'chart07_div');
 }
 
 
