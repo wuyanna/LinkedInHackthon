@@ -45,6 +45,7 @@ function main() {
   // Load Company Data
   var company = {};
   // For prototype, we use dummy data in an XML
+
   var cname = QueryString.name === undefined ? "linkedin" : QueryString.name;
   $.get(cname + '.xml', function(myContentFile) {
 

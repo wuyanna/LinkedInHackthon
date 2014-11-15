@@ -1,0 +1,18 @@
+<company>
+<id>1063</id>
+<name>Cisco</name>
+<logo-url>
+https://media.licdn.com/mpr/mpr/p/6/000/222/370/3a3d8ae.png
+</logo-url>
+<description>
+Cisco (NASDAQ: CSCO) enables people to make powerful connections-whether in business, education, philanthropy, or creativity. Cisco hardware, software, and service offerings are used to create the Internet solutions that make networks possible-providing easy access to information anywhere, at any time.Cisco was founded in 1984 by a small group of computer scientists from Stanford University. Since the company's inception, Cisco engineers have been leaders in the development of Internet Protocol (IP)-based networking technologies. Today, with more than 65,225 employees worldwide, this tradition of innovation continues with industry-leading products and solutions in the company's core development areas of routing and switching, as well as in advanced technologies such as home networking, IP telephony, optical networking, security, storage area networking, and wireless technology. In addition to its products, Cisco provides a broad range of service offerings, including technical support and advanced services. Cisco sells its products and services, both directly through its own sales force as well as through its channel partners, to large enterprises, commercial businesses, service providers, and consumers.
+</description>
+<website-url>http://www.cisco.com</website-url>
+<industries total="1">
+<industry>
+<code>5</code>
+<name>Computer Networking</name>
+</industry>
+</industries>
+<founded-year>1984</founded-year>
+</company>

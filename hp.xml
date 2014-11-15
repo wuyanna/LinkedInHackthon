@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<company>
+<id>1025</id>
+<name>Hewlett-Packard</name>
+<logo-url>
+https://media.licdn.com/mpr/mpr/p/5/000/202/2ae/19c1ca5.png
+</logo-url>
+<description>
+At HP, we don't just believe in the power of technology, we believe in the power of people when technology works for you. We believe in applying new thinking and ideas to improve the way our customers live and work. If you are going to do something, Make it Matter.
+</description>
+<website-url>http://www.hp.com</website-url>
+<industries total="1">
+<industry>
+<code>96</code>
+<name>Information Technology & Services</name>
+</industry>
+</industries>
+</company>
