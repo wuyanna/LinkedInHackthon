@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<people-search>
+  <num-results>10</num-results>
+  <people total="10">
+    <person>
+      <id>tePXJ3SX1o</id>
+      <first-name>Shannon</first-name>
+      <last-name>Ladymon</last-name>
+      <positions total="2">
+        <position>
+          <id>12345</id>
+          <title>Software Developer</title>
+          <start-date>
+            <year>2012</year>
+            <month>August</month>
+          </start-date>
+          <is-current>true</is-current>
+          <company>
+            <name>LinkedIn</name>
+          </company>
+        </position>
+        <position>
+          <id>23455</id>
+          <title>Junior Software Developer</title>
+          <start-date>
+            <year>2010</year>
+            <month>September</month>
+          </start-date>
+          <is-current>false</is-current>
+          <company>
+            <name>Amazon</name>
+          </company>
+        </position>
+      </positions>
+      <educations total="1">
+        <education>
+          <id>5678</id>
+          <school-name>Stanford</school-name>
+          <degree>Bachelor of Computer Science</degree>
+          <start-date>
+            <year>2006</year>
+          </start-date>
+          <end-date>
+            <year>2010</year>
+          </end-date>
+        </education>
+      </educations>
+    </person>
+    <person>
+      <id>tePXJ3SX1o</id>
+      <first-name>Shannon</first-name>
+      <last-name>Ladymon</last-name>
+      <positions total="2">
+        <position>
+          <id>12345</id>
+          <title>Software Developer</title>
+          <start-date>
+            <year>2012</year>
+            <month>August</month>
+          </start-date>
+          <is-current>true</is-current>
+          <company>
+            <name>LinkedIn</name>
+          </company>
+        </position>
+        <position>
+          <id>23455</id>
+          <title>Junior Software Developer</title>
+          <start-date>
+            <year>2010</year>
+            <month>September</month>
+          </start-date>
+          <is-current>false</is-current>
+          <company>
+            <name>Amazon</name>
+          </company>
+        </position>
+      </positions>
+      <educations total="1">
+        <education>
+          <id>5678</id>
+          <school-name>Stanford</school-name>
+          <degree>Bachelor of Computer Science</degree>
+          <start-date>
+            <year>2006</year>
+          </start-date>
+          <end-date>
+            <year>2010</year>
+          </end-date>
+        </education>
+      </educations>
+    </person>
+    <person>
+      <id>tePXJ3SX1o</id>
+      <first-name>Shannon</first-name>
+      <last-name>Ladymon</last-name>
+      <positions total="2">
+        <position>
+          <id>12345</id>
+          <title>Software Developer</title>
+          <start-date>
+            <year>2012</year>
+            <month>August</month>
+          </start-date>
+          <is-current>true</is-current>
+          <company>
+            <name>LinkedIn</name>
+          </company>
+        </position>
+        <position>
+          <id>23455</id>
+          <title>Junior Software Developer</title>
+          <start-date>
+            <year>2010</year>
+            <month>September</month>
+          </start-date>
+          <is-current>false</is-current>
+          <company>
+            <name>Amazon</name>
+          </company>
+        </position>
+      </positions>
+      <educations total="1">
+        <education>
+          <id>5678</id>
+          <school-name>Stanford</school-name>
+          <degree>Bachelor of Computer Science</degree>
+          <start-date>
+            <year>2006</year>
+          </start-date>
+          <end-date>
+            <year>2010</year>
+          </end-date>
+        </education>
+      </educations>
+    </person>
+    <person>
+      <id>tePXJ3SX1o</id>
+      <first-name>Shannon</first-name>
+      <last-name>Ladymon</last-name>
+      <positions total="2">
+        <position>
+          <id>12345</id>
+          <title>Software Developer</title>
+          <start-date>
+            <year>2012</year>
+            <month>August</month>
+          </start-date>
+          <is-current>true</is-current>
+          <company>
+            <name>LinkedIn</name>
+          </company>
+        </position>
+        <position>
+          <id>23455</id>
+          <title>Junior Software Developer</title>
+          <start-date>
+            <year>2010</year>
+            <month>September</month>
+          </start-date>
+          <is-current>false</is-current>
+          <company>
+            <name>Amazon</name>
+          </company>
+        </position>
+      </positions>
+      <educations total="1">
+        <education>
+          <id>5678</id>
+          <school-name>Stanford</school-name>
+          <degree>Bachelor of Computer Science</degree>
+          <start-date>
+            <year>2006</year>
+          </start-date>
+          <end-date>
+            <year>2010</year>
+          </end-date>
+        </education>
+      </educations>
+    </person>
+    <person>
+      <id>tePXJ3SX1o</id>
+      <first-name>Shannon</first-name>
+      <last-name>Ladymon</last-name>
+      <positions total="2">
+        <position>
+          <id>12345</id>
+          <title>Software Developer</title>
+          <start-date>
+            <year>2012</year>
+            <month>August</month>
+          </start-date>
+          <is-current>true</is-current>
+          <company>
+            <name>LinkedIn</name>
+          </company>
+        </position>
+        <position>
+          <id>23455</id>
+          <title>Junior Software Developer</title>
+          <start-date>
+            <year>2010</year>
+            <month>September</month>
+          </start-date>
+          <is-current>false</is-current>
+          <company>
+            <name>Amazon</name>
+          </company>
+        </position>
+      </positions>
+      <educations total="1">
+        <education>
+          <id>5678</id>
+          <school-name>Stanford</school-name>
+          <degree>Bachelor of Computer Science</degree>
+          <start-date>
+            <year>2006</year>
+          </start-date>
+          <end-date>
+            <year>2010</year>
+          </end-date>
+        </education>
+      </educations>
+    </person>
+    <person>
+      <id>tePXJ3SX1o</id>
+      <first-name>Shannon</first-name>
+      <last-name>Ladymon</last-name>
+      <positions total="2">
+        <position>
+          <id>12345</id>
+          <title>Software Developer</title>
+          <start-date>
+            <year>2012</year>
+            <month>August</month>
+          </start-date>
+          <is-current>true</is-current>
+          <company>
+            <name>LinkedIn</name>
+          </company>
+        </position>
+        <position>
+          <id>23455</id>
+          <title>Junior Software Developer</title>
+          <start-date>
+            <year>2010</year>
+            <month>September</month>
+          </start-date>
+          <is-current>false</is-current>
+          <company>
+            <name>Amazon</name>
+          </company>
+        </position>
+      </positions>
+      <educations total="1">
+        <education>
+          <id>5678</id>
+          <school-name>Stanford</school-name>
+          <degree>Bachelor of Computer Science</degree>
+          <start-date>
+            <year>2006</year>
+          </start-date>
+          <end-date>
+            <year>2010</year>
+          </end-date>
+        </education>
+      </educations>
+    </person>
+    <person>
+      <id>tePXJ3SX1o</id>
+      <first-name>Shannon</first-name>
+      <last-name>Ladymon</last-name>
+      <positions total="2">
+        <position>
+          <id>12345</id>
+          <title>Software Developer</title>
+          <start-date>
+            <year>2012</year>
+            <month>August</month>
+          </start-date>
+          <is-current>true</is-current>
+          <company>
+            <name>LinkedIn</name>
+          </company>
+        </position>
+        <position>
+          <id>23455</id>
+          <title>Junior Software Developer</title>
+          <start-date>
+            <year>2010</year>
+            <month>September</month>
+          </start-date>
+          <is-current>false</is-current>
+          <company>
+            <name>Amazon</name>
+          </company>
+        </position>
+      </positions>
+      <educations total="1">
+        <education>
+          <id>5678</id>
+          <school-name>Stanford</school-name>
+          <degree>Bachelor of Computer Science</degree>
+          <start-date>
+            <year>2006</year>
+          </start-date>
+          <end-date>
+            <year>2010</year>
+          </end-date>
+        </education>
+      </educations>
+    </person>
+    <person>
+      <id>tePXJ3SX1o</id>
+      <first-name>Shannon</first-name>
+      <last-name>Ladymon</last-name>
+      <positions total="2">
+        <position>
+          <id>12345</id>
+          <title>Software Developer</title>
+          <start-date>
+            <year>2012</year>
+            <month>August</month>
+          </start-date>
+          <is-current>true</is-current>
+          <company>
+            <name>LinkedIn</name>
+          </company>
+        </position>
+        <position>
+          <id>23455</id>
+          <title>Junior Software Developer</title>
+          <start-date>
+            <year>2010</year>
+            <month>September</month>
+          </start-date>
+          <is-current>false</is-current>
+          <company>
+            <name>Amazon</name>
+          </company>
+        </position>
+      </positions>
+      <educations total="1">
+        <education>
+          <id>5678</id>
+          <school-name>Stanford</school-name>
+          <degree>Bachelor of Computer Science</degree>
+          <start-date>
+            <year>2006</year>
+          </start-date>
+          <end-date>
+            <year>2010</year>
+          </end-date>
+        </education>
+      </educations>
+    </person>
+    <person>
+      <id>tePXJ3SX1o</id>
+      <first-name>Shannon</first-name>
+      <last-name>Ladymon</last-name>
+      <positions total="2">
+        <position>
+          <id>12345</id>
+          <title>Software Developer</title>
+          <start-date>
+            <year>2012</year>
+            <month>August</month>
+          </start-date>
+          <is-current>true</is-current>
+          <company>
+            <name>LinkedIn</name>
+          </company>
+        </position>
+        <position>
+          <id>23455</id>
+          <title>Junior Software Developer</title>
+          <start-date>
+            <year>2010</year>
+            <month>September</month>
+          </start-date>
+          <is-current>false</is-current>
+          <company>
+            <name>Amazon</name>
+          </company>
+        </position>
+      </positions>
+      <educations total="1">
+        <education>
+          <id>5678</id>
+          <school-name>Stanford</school-name>
+          <degree>Bachelor of Computer Science</degree>
+          <start-date>
+            <year>2006</year>
+          </start-date>
+          <end-date>
+            <year>2010</year>
+          </end-date>
+        </education>
+      </educations>
+    </person>
+    <person>
+      <id>tePXJ3SX1o</id>
+      <first-name>Shannon</first-name>
+      <last-name>Ladymon</last-name>
+      <positions total="2">
+        <position>
+          <id>12345</id>
+          <title>Software Developer</title>
+          <start-date>
+            <year>2012</year>
+            <month>August</month>
+          </start-date>
+          <is-current>true</is-current>
+          <company>
+            <name>LinkedIn</name>
+          </company>
+        </position>
+        <position>
+          <id>23455</id>
+          <title>Junior Software Developer</title>
+          <start-date>
+            <year>2010</year>
+            <month>September</month>
+          </start-date>
+          <is-current>false</is-current>
+          <company>
+            <name>Amazon</name>
+          </company>
+        </position>
+      </positions>
+      <educations total="1">
+        <education>
+          <id>5678</id>
+          <school-name>Stanford</school-name>
+          <degree>Bachelor of Computer Science</degree>
+          <start-date>
+            <year>2006</year>
+          </start-date>
+          <end-date>
+            <year>2010</year>
+          </end-date>
+        </education>
+      </educations>
+    </person>
+  </people>
+</people-search>
