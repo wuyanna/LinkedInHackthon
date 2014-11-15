@@ -158,9 +158,6 @@ function main() {
 
     drawPastWorkYearDistribution(people);
 
-
-    drawGraduateSchoolDistribution(people);
-
     var current_employees = people.filter(function(person) {
       for (var position in person.positions) {
         if (person.positions[position].is_current === "true" && person.positions[position].company === company.name) {
@@ -178,6 +175,8 @@ function main() {
       }
       return false;
     });
+
+    drawGraduateSchoolDistribution(current_employees);
 
     drawWhereDidCurrentEmployeesComeFrom(current_employees);
 
@@ -302,35 +301,78 @@ function main() {
   };
 
 
-  var drawGraduateSchoolDistribution = function(people) { 
+  var drawGraduateSchoolDistribution = function(people) {
     var schoolMap = {};
-	var getGraduateSchoolDistribution = function(p) {
-	  for (var person in p){
-		for (var school in p[person].educations){
-		  if (schoolMap[p[person].educations[school].school] === undefined && p[person].positions[school].is_current === "true") {
-			schoolMap[p[person].educations[school].school] = 1;
-		  } else {
-			schoolMap[p[person].educations[school].school] = schoolMap[p[person].educations[school].school] + 1;
-		  }
-		}
-	  }
-	
-	  var rows = [];
-	  for (var key in schoolMap){
-	    var entry = [];
-	    entry[0] = key;
-	    entry[1] = schoolMap[key];
-	    rows.push(entry);
-	  }
-	  return rows;
+    var getGraduateSchoolDistribution = function(p) {
+      for (var person in p) {
+        for (var school in p[person].educations) {
+          if (schoolMap[p[person].educations[school].school] === undefined) {
+            schoolMap[p[person].educations[school].school] = 1;
+          } else {
+            schoolMap[p[person].educations[school].school] = schoolMap[p[person].educations[school].school] + 1;
+          }
+        }
+      }
+
+      var rows = [];
+      for (var key in schoolMap) {
+        var entry = [];
+        entry[0] = key;
+        entry[1] = schoolMap[key];
+        rows.push(entry);
+      }
+      return rows;
     };
-	
+
     var rows = getGraduateSchoolDistribution(people);
-	
+
     drawChart("Graduate School Distribution in Current Employees", [
       ['string', 'Topping'],
       ['number', 'Slices']
     ], rows, PIE_CHART, 'chart05_div');
+  };
+
+  var drawDegreeDistribution = function(people) {
+    var degreeMap = [];
+    var DEGREE_NO = 0;
+    var DEGREE_BS = 1;
+    var DEGREE_MS = 2;
+    var DEGREE_PHD = 3;
+    for (var i = DEGREE_NO; i <= DEGREE_PHD; i++) {
+      degreeMap[i] = 0;
+    }
+
+    var getDegreeDistribution = function(p) {
+      for (var person in p) {
+        var maxDegree = DEGREE_NO; // -1: no degree; 0: bachela; 1: master; 2: phd
+        for (var edu in p[person].educations) {
+          if (p[person].educations[edu].degree.indexOf('Bachelor') != -1) {
+            maxDegree = Math.max(DEGREE_BS, maxDegree);
+          } else if (p[person].educations[edu].degree.indexOf('Master') != -1) {
+            maxDegree = Math.max(DEGREE_MS, maxDegree);
+          } else if (p[person].educations[edu].degree.indexOf('PhD') != -1) {
+            maxDegree = Math.max(DEGREE_PHD, maxDegree);
+          }
+        }
+      };
+
+      var degreeToString = ["No degree", "Bachelor", "Master", "PhD"];
+      var rows = [];
+      for (var key in degreeMap) {
+        var entry = [];
+        entry[0] = degreeToString[key];
+        entry[1] = degreeMap[key];
+        rows.push(entry);
+      }
+      return rows;
+    };
+
+    var rows = getDegreeDistribution(people);
+
+    drawChart("Degree Distribution in Current Employees", [
+      ['string', 'Topping'],
+      ['number', 'Slices']
+    ], rows, PIE_CHART, 'chart02_div');
   };
 
   var drawWhereDidCurrentEmployeesComeFrom = function(p) {
