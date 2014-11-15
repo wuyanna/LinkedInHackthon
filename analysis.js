@@ -183,7 +183,7 @@ function main() {
 
     drawDegreeDistribution(current_employees);
     drawWhereDidCurrentEmployeesComeFrom(current_employees);
-
+    drawWorkExpDistribution(current_employees);
 
     //Bar chart for software engineers ratio
     renderSoftwareEnggRatio(people);
@@ -369,6 +369,62 @@ function main() {
       ['string', 'Topping'],
       ['number', 'Slices']
     ], rows, PIE_CHART, 'chart05_div');
+  };
+
+  var drawWorkExpDistribution = function(people) {
+    var expMap = {};
+    var getWorkExpDistribution = function(p) {
+      
+      for (var person in p) {
+        var grad_year = "0";
+        for (var school in p[person].educations) {
+          var end = p[person].educations[school].end_date;
+          var end_year = end === undefined ? "0" : end.year;
+          if (parseInt(end_year) > parseInt(grad_year)) {
+            grad_year = end_year;
+          }
+        }
+        if (grad_year === "0") {
+          continue;
+        }
+        var exp = 2014 - parseInt(grad_year);
+        if (expMap[exp] === undefined) {
+          expMap[exp] = 1;
+        } else {
+          expMap[exp] = expMap[exp] + 1;
+        }
+      }
+
+      var rows = [];
+      var res = {};
+      res["Fresh Grad ( < 3 yrs)"] = 0;
+      res["Experienced ( < 7 yrs)"] = 0;
+      res["Senior ( >= 7 yrs)"] = 0;
+      for (var k in expMap) {
+        if (k < 3) {
+          res["Fresh Grad ( < 3 yrs)"] = expMap[k];
+        } else if (k < 7) {
+          res["Experienced ( < 7 yrs)"] = expMap[k];
+        } else {
+          res["Senior ( >= 7 yrs)"] = expMap[k];
+        }
+      }
+
+      for (var key in res) {
+        var entry = [];
+        entry[0] = key;
+        entry[1] = res[key];
+        rows.push(entry);
+      }
+      return rows;
+    };
+
+    var rows = getWorkExpDistribution(people);
+
+    drawChart("Work Experience of Current Employees", [
+      ['string', 'Topping'],
+      ['number', 'Slices']
+    ], rows, PIE_CHART, 'chart09_div');
   };
 
   var drawDegreeDistribution = function(people) {
