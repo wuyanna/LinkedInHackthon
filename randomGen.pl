@@ -12,7 +12,7 @@ open(FNAMES, '<', "/Users/Shannon/devHer/firstnames") or die "Couldn't open firs
 open(LNAMES, '<', "/Users/Shannon/devHer/lastnames") or die "Couldn't open last names, $!";
 
 
-my ($profile_id, $f_name, $l_name, $pos_total, $pos_id, $pos_title, $pos_start_year, $pos_start_month, $pos_is_current, $pos_company, $ed_total, $ed_id, $ed_school, $ed_degree, $ed_start, $ed_end, $working_years);
+my ($rand_title, $rand_ed, $pos_max_len, $pos_len, $pos_yr_sum, $profile_id, $f_name, $l_name, $pos_total, $pos_id, $pos_title, $pos_start_year, $pos_start_month, $pos_is_current, $pos_company, $ed_total, $ed_id, $ed_school, $ed_degree, $ed_start, $ed_end, $working_years);
 
 my @pos_title_arr = ("Software Engineer", "Product Manager", "Project Manager", "Quality Assurance Engineer");
 
@@ -59,10 +59,49 @@ for (my $i = 0; $i < 10; $i++)
 	$f_name = $f_name_arr[int(rand(300))];
 	$l_name = $l_name_arr[int(rand(300))];
 	$profile_id = int(rand(999999999));
-	$working_years = int(rand(30));
-	$pos_total = 1 + int(rand(7));
-	$pos_title = $pos_title_arr[int(rand(4))];
-	$ed_total = 1 + int(rand(3));
+#	$working_years = int(rand(30));
+	$pos_total = 1 + int(rand(10));
+
+
+
+	$rand_title = int(rand(10));
+	if ($rand_title < 4)
+	{
+		$rand_title = 0;
+	}
+	elsif ($rand_title >=4 && $rand_title < 6)
+	{
+		$rand_title = 1;
+	}
+	elsif ($rand_title >=6 && $rand_title < 8)
+	{
+		$rand_title = 2;
+	}
+	else
+	{
+		$rand_title = 3;
+	}
+	print "The random title num is $rand_title\n";
+	$pos_title = $pos_title_arr[$rand_title];
+
+
+	$rand_ed = int(rand(10));
+        if ($rand_ed < 6)
+        {
+                $rand_ed = 0;
+        }
+        elsif ($rand_ed >=6 && $rand_ed < 9)
+        {
+                $rand_ed = 1;
+        }
+        else
+        {
+                $rand_ed = 2;
+        }
+        print "The random education num is $rand_ed\n";
+        $ed_total = (1 + $rand_ed);
+	print "The ed degree is $ed_degree_arr[$ed_total]\n";
+
 
 #	print RAND10 "$f_name, $l_name, $profile_id, $pos_total, $pos_id, $pos_title, $pos_start_month, $pos_is_current, $pos_company, $ed_total, $ed_id, $ed_school, $ed_degree, $working_years\n";
 
@@ -76,6 +115,23 @@ for (my $i = 0; $i < 10; $i++)
 
 	for (my $num_pos = 0; $num_pos < $pos_total; $num_pos++)
 	{
+
+		if ($num_pos = 0)
+		{
+			$pos_is_current = "true";
+		}
+		else
+		{
+			$pos_is_current = "false";
+		}
+
+		$pos_max_len = (1 + rand(30)) / $pos_total;
+		print "The max length is $pos_max_len\n";
+
+		$pos_yr_sum = 0;
+
+		for (
+
 			
 		$pos_id = int(rand(999999));
 #		$pos_start_year  #calc based on working years
