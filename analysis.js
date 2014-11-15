@@ -19,16 +19,35 @@ google.setOnLoadCallback(main);
 
 function main() {
 
-	//load company data from api
-	$.get(
-	    'https://api.linkedin.com/v1/companies/universal-name=linkedin?oauth2_access_token=AQXdSP_W41_UPs5ioT_t8HESyODB4FqbkJ8LrV_5mff4gPODzOYR',
-	    function(data) { alert(data); }
-	);
-	
+  var QueryString = function() {
+    // This function is anonymous, is executed immediately and 
+    // the return value is assigned to QueryString!
+    var query_string = {};
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split("=");
+      // If first entry with this name
+      if (typeof query_string[pair[0]] === "undefined") {
+        query_string[pair[0]] = pair[1];
+        // If second entry with this name
+      } else if (typeof query_string[pair[0]] === "string") {
+        var arr = [query_string[pair[0]], pair[1]];
+        query_string[pair[0]] = arr;
+        // If third or later entry with this name
+      } else {
+        query_string[pair[0]].push(pair[1]);
+      }
+    }
+    return query_string;
+  }();
+
   // Load Company Data
   var company = {};
   // For prototype, we use dummy data in an XML
-  $.get('linkedin.xml', function(myContentFile) {
+
+  var cname = QueryString.name === undefined ? "linkedin" : QueryString.name;
+  $.get(cname + '.xml', function(myContentFile) {
 
     company.about = {};
     xmlDoc = $.parseXML(myContentFile),
@@ -54,7 +73,7 @@ function main() {
     showCompanyInfo(company);
   }, 'text');
 
-  $.get('random10txt.txt', function(myContentFile) {
+  $.get('random1000.xml', function(myContentFile) {
     var people = [];
     xmlDoc = $.parseXML(myContentFile),
     $xml = $(xmlDoc),
@@ -163,7 +182,7 @@ function main() {
   var renderGraphs = function(people) {
     drawCurrentWorkYearDistribution(people);
 
-    drawPastWorkYearDistribution(people);
+
 
     var current_employees = people.filter(function(person) {
       for (var position in person.positions) {
@@ -183,11 +202,13 @@ function main() {
       return false;
     });
 
+    drawPastWorkYearDistribution(past_employees);
+
     drawGraduateSchoolDistribution(current_employees);
 
     drawDegreeDistribution(current_employees);
     drawWhereDidCurrentEmployeesComeFrom(current_employees);
-
+    drawWorkExpDistribution(current_employees);
 
     //Bar chart for software engineers ratio
     renderSoftwareEnggRatio(people);
@@ -205,12 +226,12 @@ function main() {
       $('#desc_list').append('<li class="aboutlist"><h3>' + key + '</h3><p>' + company.about[key] + '</p></li>')
     }*/
 
-    
+
     var keys = [];
     var keyCount = 0;
     for (var key in company.about) {
-	  keys[keyCount] = key;
-	  keyCount++;
+      keys[keyCount] = key;
+      keyCount++;
       /*$('#desc_list').append(
         '<tr><td><h3>' + key + '</h3></td><td>' + company.about[key] + '</td></tr>') */
     }
@@ -231,21 +252,21 @@ function main() {
 	} else {
 	  $('#desc_list').append('<tr><td><h3>' + "summary" + '</h3></td><td colspan="3" align="left">' + company.desc + '</td></tr></table>')	
 	}*/
-	
-	var str = "";
-	str += '<table style="width:100%">';
-	str += '<tr><td><h3>name</h3></td>';
-	for (var i = 0; i < keyCount; i++){
-	  str += '<td><h3>' + keys[i] + '</h3></td>';	
-	}
-	str += '</tr><tr><td>' + company.name + '</td>';
-	for (var i = 0; i < keyCount; i++){
-	  str += '<td>' + company.about[keys[i]] + '</td>';
-	}
-	str += '</tr>';
-	str += '<tr><td valign = "top"><h3>summary</h3></td><td colspan="3" align="left">' + company.desc + '</td></tr></table>'
-	$('#desc_list').append(str);
-    
+
+    var str = "";
+    str += '<table style="width:100%">';
+    str += '<tr><td><h3>name</h3></td>';
+    for (var i = 0; i < keyCount; i++) {
+      str += '<td><h3>' + keys[i] + '</h3></td>';
+    }
+    str += '</tr><tr><td>' + company.name + '</td>';
+    for (var i = 0; i < keyCount; i++) {
+      str += '<td>' + company.about[keys[i]] + '</td>';
+    }
+    str += '</tr>';
+    str += '<tr><td valign = "top"><h3>summary</h3></td><td colspan="3" align="left">' + company.desc + '</td></tr></table>'
+    $('#desc_list').append(str);
+
   };
 
   var drawCurrentWorkYearDistribution = function(p) {
@@ -297,7 +318,7 @@ function main() {
     var maxYears = 0;
     for (var person in p) {
       for (var position in p[person].positions) {
-        if (p[person].positions[position].company === company.name && p[person].positions[position].is_current === "false") {
+        if (p[person].positions[position].company === company.name) {
           var years = getDuration(p[person].positions[position].start_date, p[person].positions[position].end_date);
           if (yearMap[years] === undefined) {
             yearMap[years] = 1;
@@ -373,6 +394,62 @@ function main() {
       ['string', 'Topping'],
       ['number', 'Slices']
     ], rows, PIE_CHART, 'chart05_div');
+  };
+
+  var drawWorkExpDistribution = function(people) {
+    var expMap = {};
+    var getWorkExpDistribution = function(p) {
+
+      for (var person in p) {
+        var grad_year = "0";
+        for (var school in p[person].educations) {
+          var end = p[person].educations[school].end_date;
+          var end_year = end === undefined ? "0" : end.year;
+          if (parseInt(end_year) > parseInt(grad_year)) {
+            grad_year = end_year;
+          }
+        }
+        if (grad_year === "0") {
+          continue;
+        }
+        var exp = 2014 - parseInt(grad_year);
+        if (expMap[exp] === undefined) {
+          expMap[exp] = 1;
+        } else {
+          expMap[exp] = expMap[exp] + 1;
+        }
+      }
+
+      var rows = [];
+      var res = {};
+      res["Fresh Grad ( < 3 yrs)"] = 0;
+      res["Experienced ( < 7 yrs)"] = 0;
+      res["Senior ( >= 7 yrs)"] = 0;
+      for (var k in expMap) {
+        if (k < 3) {
+          res["Fresh Grad ( < 3 yrs)"] = expMap[k];
+        } else if (k < 7) {
+          res["Experienced ( < 7 yrs)"] = expMap[k];
+        } else {
+          res["Senior ( >= 7 yrs)"] = expMap[k];
+        }
+      }
+
+      for (var key in res) {
+        var entry = [];
+        entry[0] = key;
+        entry[1] = res[key];
+        rows.push(entry);
+      }
+      return rows;
+    };
+
+    var rows = getWorkExpDistribution(people);
+
+    drawChart("Work Experience of Current Employees", [
+      ['string', 'Topping'],
+      ['number', 'Slices']
+    ], rows, PIE_CHART, 'chart09_div');
   };
 
   var drawDegreeDistribution = function(people) {
@@ -606,4 +683,3 @@ function getDuration(start, end) {
   }
   return parseInt(end.year) - parseInt(start.year);
 }
-
