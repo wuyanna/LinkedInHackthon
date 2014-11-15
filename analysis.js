@@ -48,7 +48,7 @@ function main() {
     showCompanyInfo(company);
   }, 'text');
 
-  $.get('random10.xml', function(myContentFile) {
+  $.get('random10txt.txt', function(myContentFile) {
     var people = [];
     xmlDoc = $.parseXML(myContentFile),
     $xml = $(xmlDoc),
@@ -490,7 +490,7 @@ function main() {
     }
 
     // What company did they come from
-    drawBarChart("Ratio of Software Engineers", chartData, data,
+    drawBarChart("Ratio of Software Engineers in Recent 5 years", chartData, data,
       'chart01_div');
 
   }
