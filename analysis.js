@@ -45,10 +45,16 @@ function main() {
   var showCompanyInfo = function (company) {
     $("#logo").attr("src", company.logo);
 
+    /*for (var key in company.about) {
+      $('#desc_list').append('<li class="aboutlist"><h3>' + key + '</h3><p>' + company.about[key] + '</p></li>')
+    }*/
+
+    $('#desc_list').append('<table style="width:100%">')
     for (var key in company.about) {
-      $('#desc_list').append('<li class="aboutlist"><h4>' + key + '</h4><p>' + company.about[key] + '</p></li>')
+      $('#desc_list').append(
+	    '<tr><td><h3>' + key + '</h3></td><td>' + company.about[key] + '</td></tr>')
     }
-    
+    $('#desc_list').append('</table>')
   };
 
 
