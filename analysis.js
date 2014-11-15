@@ -158,6 +158,9 @@ function main() {
 
     drawPastWorkYearDistribution(people);
 
+
+    drawGraduateSchoolDistribution(people);
+
     var current_employees = people.filter(function(person) {
       for (var position in person.positions) {
         if (person.positions[position].is_current === "true" && person.positions[position].company === company.name) {
@@ -184,6 +187,7 @@ function main() {
 
 
     drawWhereDoPastEmployeesGo(past_employees);
+
 
   };
 
@@ -297,6 +301,38 @@ function main() {
     $('#chart03_div').append("<p class='datalbl'>Average working years in current employees: " + avg + "</p>");
   };
 
+
+  var drawGraduateSchoolDistribution = function(people) { 
+    var schoolMap = {};
+	var getGraduateSchoolDistribution = function(p) {
+	  for (var person in p){
+		for (var school in p[person].educations){
+		  if (schoolMap[p[person].educations[school].school] === undefined && p[person].positions[school].is_current === "true") {
+			schoolMap[p[person].educations[school].school] = 1;
+		  } else {
+			schoolMap[p[person].educations[school].school] = schoolMap[p[person].educations[school].school] + 1;
+		  }
+		}
+	  }
+	
+	  var rows = [];
+	  for (var key in schoolMap){
+	    var entry = [];
+	    entry[0] = key;
+	    entry[1] = schoolMap[key];
+	    rows.push(entry);
+	  }
+	  return rows;
+    };
+	
+    var rows = getGraduateSchoolDistribution(people);
+	
+    drawChart("Graduate School Distribution in Current Employees", [
+      ['string', 'Topping'],
+      ['number', 'Slices']
+    ], rows, PIE_CHART, 'chart05_div');
+  };
+
   var drawWhereDidCurrentEmployeesComeFrom = function(p) {
     var pastCompanyMap = {};
     for (var person in p) {
@@ -358,6 +394,7 @@ function main() {
       ], rows,
       'chart04_div');
 
+
   };
 
   var renderSoftwareEnggRatio = function(people) {
@@ -414,18 +451,6 @@ function main() {
       'chart01_div');
 
   }
-
-  // Graduation Schools distribution in current employees
-  drawChart("Graduation Schools distribution in current employees", [
-    ['string', 'Topping'],
-    ['number', 'Slices']
-  ], [
-    ['Stanford', 3],
-    ['MIT', 1],
-    ['CMU', 1],
-    ['UIUC', 1],
-    ['Others', 1]
-  ], PIE_CHART, 'chart05_div');
 
 }
 
