@@ -48,7 +48,7 @@ function main() {
     showCompanyInfo(company);
   }, 'text');
 
-  $.get('random10txt.txt', function(myContentFile) {
+  $.get('random1000.xml', function(myContentFile) {
     var people = [];
     xmlDoc = $.parseXML(myContentFile),
     $xml = $(xmlDoc),
@@ -157,7 +157,7 @@ function main() {
   var renderGraphs = function(people) {
     drawCurrentWorkYearDistribution(people);
 
-    drawPastWorkYearDistribution(people);
+    
 
     var current_employees = people.filter(function(person) {
       for (var position in person.positions) {
@@ -176,6 +176,8 @@ function main() {
       }
       return false;
     });
+
+    drawPastWorkYearDistribution(past_employees);
 
     drawGraduateSchoolDistribution(current_employees);
 
@@ -291,7 +293,7 @@ function main() {
     var maxYears = 0;
     for (var person in p) {
       for (var position in p[person].positions) {
-        if (p[person].positions[position].company === company.name && p[person].positions[position].is_current === "false") {
+        if (p[person].positions[position].company === company.name) {
           var years = getDuration(p[person].positions[position].start_date, p[person].positions[position].end_date);
           if (yearMap[years] === undefined) {
             yearMap[years] = 1;
