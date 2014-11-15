@@ -5,7 +5,7 @@
 use warnings;
 use strict;
 
-open(RAND10, '>', "/Users/Shannon/devHer/random10txt.txt") or die "Couldn't open file to write to, $!";
+open(RAND10, '>', "/Users/Shannon/devHer/random1000.xml") or die "Couldn't open file to write to, $!";
 
 open(FNAMES, '<', "/Users/Shannon/devHer/firstnames") or die "Couldn't open first names, $!";
 
@@ -50,11 +50,11 @@ while (my $line = <LNAMES>)
 
 print RAND10 '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <people-search>
-  <num-results>100</num-results>
-  <people total="100">
+  <num-results>1000</num-results>
+  <people total="1000">
 ';
 
-for (my $i = 0; $i < 100; $i++)
+for (my $i = 0; $i < 1000; $i++)
 {
 
 	$f_name = $f_name_arr[int(rand(300))];
