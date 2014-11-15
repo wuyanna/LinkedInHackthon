@@ -39,7 +39,7 @@ function main() {
     $xml.find('founded-year').each(function() {
       company.about.founded = $(this).text();
     });
-    $xml.find('name').each(function () {
+    $xml.find('company > name').each(function () {
       company.name = $(this).text();
     });
     showCompanyInfo(company);
@@ -169,22 +169,63 @@ function main() {
 
   var renderSoftwareEnggRatio = function(people) {
 	//Render bar chart for sofware engineer ratio
+
+	var chartData = [];
+	chartData.push(['string', 'Year']);
+	chartData.push(['number', 'Software Engineers']);
+	chartData.push(['number', 'Total Employees']);
+	
+	var softwareEnggs = {};
+	var totalEmployees = {};
+
 	for(var i=0;i<people.length;i++)
-	{
-		for(var position in people[i].positions)
+	{	
+	 	var person = people[i];
+	 	var positions = person.positions;
+	 	for(var j=0;j<positions.length;j++)
 		{
-			if(position.is_currentv && position.company==company.name)
+			var position = positions[j];
+
+			if(position.company===company.name)
 			{
-				//2011 data
-
-				//2012 data
-
-				//2013 data
-
-				//2014 data
+				var end_year;
+				if(jQuery.isEmptyObject(position.end_date))
+					end_year = new Date().getFullYear();
+				else
+					end_year = position.end_date.year;
+				for(var year=parseInt(position.start_date.year);year<=end_year;year++)
+				{
+					if(!(year in totalEmployees))
+						totalEmployees[year]=0;
+					totalEmployees[year] = totalEmployees[year] + 1;
+					//check interval between start_date && end_date
+					if(position.title.indexOf("Software Developer")!=-1)
+					{
+						if(!(year in softwareEnggs))
+							softwareEnggs[year]=0;						
+						softwareEnggs[year] = softwareEnggs[year] + 1;
+					}
+				}
 			}
 		}
-	}  	
+     }
+
+   //Build data array for bar chart
+   var data = [];
+
+   for(var year in totalEmployees)
+   {	
+   	 var softwareEnggsNumber = 0;
+   	 if(softwareEnggs[year]!==undefined)
+   	 	softwareEnggsNumber = softwareEnggs[year];
+   	 var totalEmployeesNumber = totalEmployees[year];
+   	 data.push([year,softwareEnggs[year],totalEmployees[year]]);
+   }
+
+	  // What company did they come from
+  drawBarChart("Ratio of Software Engineers", chartData, data,
+    'chart01_div');
+
   }
 
   // Load People Search Result
@@ -200,18 +241,7 @@ function main() {
   //   ['Total Employees', 1],
   // ], PIE_CHART, 'chart01_div');
 
-  // What company did they come from
-  drawBarChart("Ratio of Software Engineers", [
-      ['string', 'Year'],
-      ['number', 'Software Engineers'],
-      ['number', 'Total Employees']
-    ], [
-      ['2011', 12000, 28000],
-      ['2012', 14000, 32000],
-      ['2013', 19000, 46000],
-      ['2014', 29000, 55000]
-    ],
-    'chart01_div');
+
 
   // Average working years in current employees
   drawChart("Average working years in current employees", [
