@@ -21,7 +21,7 @@ function main() {
 
 	//load company data from api
 	$.get(
-	    'ttps://api.linkedin.com/v1/companies/universal-name=linkedin?oauth2_access_token=AQXdSP_W41_UPs5ioT_t8HESyODB4FqbkJ8LrV_5mff4gPODzOYR',
+	    'https://api.linkedin.com/v1/companies/universal-name=linkedin?oauth2_access_token=AQXdSP_W41_UPs5ioT_t8HESyODB4FqbkJ8LrV_5mff4gPODzOYR',
 	    function(data) { alert(data); }
 	);
 	
