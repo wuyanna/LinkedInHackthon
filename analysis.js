@@ -42,6 +42,33 @@ function main() {
     showCompanyInfo(company);
   }, 'text');
 
+  $.get('sample_data.xml', function(myContentFile) {
+    var people = [];
+    xmlDoc = $.parseXML(myContentFile),
+    $xml = $(xmlDoc),
+    $xml.find('logo-url').each(function () {
+      company.logo = $(this).text();
+    });
+    $xml.find('description').each(function () {
+      company.desc = $(this).text();
+    });
+    $xml.find('website-url').each(function () {
+      company.about.website = $(this).text();
+    });
+    $xml.find('industry > name').each(function () {
+      company.about.industry = $(this).text();
+    });
+    $xml.find('founded-year').each(function () {
+      company.about.founded = $(this).text();
+    });
+
+    renderGraphs(people);
+  }, 'text');
+
+  var renderGraphs = function (people) {
+
+  };
+
   var showCompanyInfo = function (company) {
     $("#logo").attr("src", company.logo);
 
