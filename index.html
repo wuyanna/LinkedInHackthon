@@ -1,12 +1,31 @@
 <html>
   <head>
+	<style>
+	  .outer {
+        position: relative;
+      }
+      .scaling-image {
+        position: relative;
+        /*visibility: hidden; /* make sure it's hidden */
+        width: 100%;
+        min-width: 100%;
+      }
+      .inner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow:hidden;
+      }
+    </style>
   	
   	<title>Interesting Employee Data of a Company</title>
   	
   </head>
   <body>
-  	<div id="company_logo">
-  		<img id="logo" src="">
+  	<div id="company_logo" class="outer">
+      <img id="logo" src="" class="scaling-image">
   	</div>
 
   	<div id="company_summary">
@@ -15,14 +34,36 @@
   		</dl>
   	</div>
 
-  	<div class="chart" id="chart01_div"></div>
-  	<div class="chart" id="chart02_div"></div>
-  	<div class="chart" id="chart03_div"></div>
-  	<div class="chart" id="chart04_div"></div>
-  	<div class="chart" id="chart05_div"></div>
-  	<div class="chart" id="chart06_div"></div>
-  	<div class="chart" id="chart07_div"></div>
+    <table style="width:100%">
+      <tr>
+        <td>
+          <div class="chart" id="chart01_div"></div>
+        </td>
+        <td>
+          <div class="chart" id="chart02_div"></div>
+        </td>
+        <td>
+          <div class="chart" id="chart03_div"></div>
+        </td>
+      </tr>
+  
+      <tr>
+        <td>
+          <div class="chart" id="chart04_div"></div>
+        </td>
+        <td>
+          <div class="chart" id="chart05_div"></div>
+        </td>
+        <td>
+          <div class="chart" id="chart06_div"></div>
+        </td>
+      </tr>
 
+      <tr>
+	    <td>
+          <div class="chart" id="chart07_div"></div>
+        </td>
+    </table>
 
 	<script type="text/javascript" src="jquery-1.11.1.js"></script>
   	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
