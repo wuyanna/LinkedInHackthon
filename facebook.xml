@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<company>
+<id>10667</id>
+<name>Facebook</name>
+<logo-url>
+https://media.licdn.com/mpr/mpr/p/5/005/01a/0e5/01d33d7.png
+</logo-url>
+<description>
+Founded in 2004, Facebook’s mission is to make the world more open and connected. People use Facebook to stay connected with friends and family, to discover what’s going on in the world, and to share and express what matters to them. Other ways to connect with us: Visit the Facebook Blog at: blog.facebook.com Engineering blog at: facebook.com/engineering Find out about Career Opportunities at: facebook.com/careers Subscribe to more videos at: youtube.com/facebook
+</description>
+<website-url>http://www.facebook.com/</website-url>
+<industries total="1">
+<industry>
+<code>6</code>
+<name>Internet</name>
+</industry>
+</industries>
+<founded-year>2004</founded-year>
+</company>

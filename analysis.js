@@ -19,10 +19,16 @@ google.setOnLoadCallback(main);
 
 function main() {
 
+	//load company data from api
+	$.get(
+	    'https://api.linkedin.com/v1/companies/universal-name=linkedin?oauth2_access_token=AQXdSP_W41_UPs5ioT_t8HESyODB4FqbkJ8LrV_5mff4gPODzOYR',
+	    function(data) { alert(data); }
+	);
+	
   // Load Company Data
   var company = {};
   // For prototype, we use dummy data in an XML
-  $.get('linkedin.xml', function(myContentFile) {
+  $.get('twitter.xml', function(myContentFile) {
 
     company.about = {};
     xmlDoc = $.parseXML(myContentFile),
@@ -48,7 +54,7 @@ function main() {
     showCompanyInfo(company);
   }, 'text');
 
-  $.get('random10.xml', function(myContentFile) {
+  $.get('random10txt.txt', function(myContentFile) {
     var people = [];
     xmlDoc = $.parseXML(myContentFile),
     $xml = $(xmlDoc),
@@ -159,9 +165,6 @@ function main() {
 
     drawPastWorkYearDistribution(people);
 
-
-    drawGraduateSchoolDistribution(people);
-
     var current_employees = people.filter(function(person) {
       for (var position in person.positions) {
         if (person.positions[position].is_current === "true" && person.positions[position].company === company.name) {
@@ -180,6 +183,9 @@ function main() {
       return false;
     });
 
+    drawGraduateSchoolDistribution(current_employees);
+
+    drawDegreeDistribution(current_employees);
     drawWhereDidCurrentEmployeesComeFrom(current_employees);
 
 
@@ -199,12 +205,47 @@ function main() {
       $('#desc_list').append('<li class="aboutlist"><h3>' + key + '</h3><p>' + company.about[key] + '</p></li>')
     }*/
 
-    $('#desc_list').append('<table style="width:100%">')
+    
+    var keys = [];
+    var keyCount = 0;
     for (var key in company.about) {
-      $('#desc_list').append(
-        '<tr><td><h3>' + key + '</h3></td><td>' + company.about[key] + '</td></tr>')
+	  keys[keyCount] = key;
+	  keyCount++;
+      /*$('#desc_list').append(
+        '<tr><td><h3>' + key + '</h3></td><td>' + company.about[key] + '</td></tr>') */
     }
-    $('#desc_list').append('</table>')
+
+    /*$('#desc_list').append('<table style="width:100%">')
+    $('#desc_list').append('<tr><td><h3>' + "name" + '</h3></td><td>' + company.name + '</td>')
+    for (var i = 0; i < keyCount; i++) {
+	  if (i % 2 == 0) { 
+		$('#desc_list').append(
+        '<td><h3>' + keys[i] + '</h3></td><td>' + company.about[keys[i]] + '</td></tr>')
+      } else {
+	    $('#desc_list').append(
+        '<tr><td><h3>' + keys[i] + '</h3></td><td>' + company.about[keys[i]] + '</td>')
+      }
+	}
+	if (keyCount % 2 == 0){
+	  $('#desc_list').append('</tr><tr><td>' + "summary" + '</td><td colspan="3" align="left">' + company.desc + '</td></tr></table>')	
+	} else {
+	  $('#desc_list').append('<tr><td><h3>' + "summary" + '</h3></td><td colspan="3" align="left">' + company.desc + '</td></tr></table>')	
+	}*/
+	
+	var str = "";
+	str += '<table style="width:100%">';
+	str += '<tr><td><h3>name</h3></td>';
+	for (var i = 0; i < keyCount; i++){
+	  str += '<td><h3>' + keys[i] + '</h3></td>';	
+	}
+	str += '</tr><tr><td>' + company.name + '</td>';
+	for (var i = 0; i < keyCount; i++){
+	  str += '<td>' + company.about[keys[i]] + '</td>';
+	}
+	str += '</tr>';
+	str += '<tr><td valign = "top"><h3>summary</h3></td><td colspan="3" align="left">' + company.desc + '</td></tr></table>'
+	$('#desc_list').append(str);
+    
   };
 
   var drawCurrentWorkYearDistribution = function(p) {
@@ -295,43 +336,89 @@ function main() {
   };
 
   var showAveragePastWorkYears = function(avg) {
-    $('#chart07_div').append("<p class='datalbl'>Average working years in Past employees: " + avg + "</p>");
+    $('#chart07_div').append("<p class='datalbl'>Average working years in Past employees: " + avg.toFixed(1) + "</p>");
   };
 
   var showAverageCurrnetWorkYears = function(avg) {
-    $('#chart03_div').append("<p class='datalbl'>Average working years in current employees: " + avg + "</p>");
+    $('#chart03_div').append("<p class='datalbl'>Average working years in current employees: " + avg.toFixed(1) + "</p>");
   };
 
 
-  var drawGraduateSchoolDistribution = function(people) { 
+  var drawGraduateSchoolDistribution = function(people) {
     var schoolMap = {};
-	var getGraduateSchoolDistribution = function(p) {
-	  for (var person in p){
-		for (var school in p[person].educations){
-		  if (schoolMap[p[person].educations[school].school] === undefined && p[person].positions[school].is_current === "true") {
-			schoolMap[p[person].educations[school].school] = 1;
-		  } else {
-			schoolMap[p[person].educations[school].school] = schoolMap[p[person].educations[school].school] + 1;
-		  }
-		}
-	  }
-	
-	  var rows = [];
-	  for (var key in schoolMap){
-	    var entry = [];
-	    entry[0] = key;
-	    entry[1] = schoolMap[key];
-	    rows.push(entry);
-	  }
-	  return rows;
+    var getGraduateSchoolDistribution = function(p) {
+      for (var person in p) {
+        for (var school in p[person].educations) {
+          if (schoolMap[p[person].educations[school].school] === undefined) {
+            schoolMap[p[person].educations[school].school] = 1;
+          } else {
+            schoolMap[p[person].educations[school].school] = schoolMap[p[person].educations[school].school] + 1;
+          }
+        }
+      }
+
+      var rows = [];
+      for (var key in schoolMap) {
+        var entry = [];
+        entry[0] = key;
+        entry[1] = schoolMap[key];
+        rows.push(entry);
+      }
+      return rows;
     };
-	
+
     var rows = getGraduateSchoolDistribution(people);
-	
+
     drawChart("Graduate School Distribution in Current Employees", [
       ['string', 'Topping'],
       ['number', 'Slices']
     ], rows, PIE_CHART, 'chart05_div');
+  };
+
+  var drawDegreeDistribution = function(people) {
+    var degreeMap = [];
+    var DEGREE_NO = 0;
+    var DEGREE_BS = 1;
+    var DEGREE_MS = 2;
+    var DEGREE_PHD = 3;
+    for (var i = DEGREE_NO; i <= DEGREE_PHD; i++) {
+      degreeMap[i] = 0;
+    }
+
+    var getDegreeDistribution = function(p) {
+      for (var person in p) {
+        var maxDegree = DEGREE_NO; // -1: no degree; 0: bachela; 1: master; 2: phd
+        for (var edu in p[person].educations) {
+          if (p[person].educations[edu].degree.indexOf('Bachelor') != -1) {
+            maxDegree = Math.max(DEGREE_BS, maxDegree);
+          } else if (p[person].educations[edu].degree.indexOf('Master') != -1) {
+            maxDegree = Math.max(DEGREE_MS, maxDegree);
+          } else if (p[person].educations[edu].degree.indexOf('PhD') != -1) {
+            maxDegree = Math.max(DEGREE_PHD, maxDegree);
+          }
+        }
+        degreeMap[maxDegree] = degreeMap[maxDegree] + 1;
+      };
+
+
+
+      var degreeToString = ["No degree", "Bachelor", "Master", "PhD"];
+      var rows = [];
+      for (var key in degreeMap) {
+        var entry = [];
+        entry[0] = degreeToString[key];
+        entry[1] = degreeMap[key];
+        rows.push(entry);
+      }
+      return rows;
+    };
+
+    var rows = getDegreeDistribution(people);
+
+    drawChart("Degrees Current Employees Hold", [
+      ['string', 'Topping'],
+      ['number', 'Slices']
+    ], rows, PIE_CHART, 'chart02_div');
   };
 
   var drawWhereDidCurrentEmployeesComeFrom = function(p) {
@@ -426,7 +513,7 @@ function main() {
               totalEmployees[year] = 0;
             totalEmployees[year] = totalEmployees[year] + 1;
             //check interval between start_date && end_date
-            if (position.title.indexOf("Software Developer") != -1) {
+            if (position.title.indexOf("Software Engineer") != -1) {
               if (!(year in softwareEnggs))
                 softwareEnggs[year] = 0;
               softwareEnggs[year] = softwareEnggs[year] + 1;
@@ -448,7 +535,7 @@ function main() {
     }
 
     // What company did they come from
-    drawBarChart("Ratio of Software Engineers", chartData, data,
+    drawBarChart("Ratio of Software Engineers in Recent 5 years", chartData, data.slice(data.length - 5, data.length),
       'chart01_div');
 
   }
@@ -520,27 +607,3 @@ function getDuration(start, end) {
   return parseInt(end.year) - parseInt(start.year);
 }
 
-function onLinkedInLoad() {
-
-console.log("LOADED");
-
-   // Listen for an auth event to occur
-   IN.Event.on(IN, "auth", onLinkedInAuth);
-}
-
-function onLinkedInAuth() {
-
-linkedInAuth = true;
-console.log("LinkedIn Auth");
-
-//Fetching company data from LinkedIn Company API
-// $.get(
-// "https://api.linkedin.com/v1/companies/universal-name=linkedin",
-// {},
-// function(data) {
-//    alert('page content: ' + data);
-// }
-// );
-
-// var a = 5;
-}   
