@@ -156,6 +156,28 @@ function main() {
     drawCurrentWorkYearDistribution(people);
 
     drawPastWorkYearDistribution(people);
+
+    var current_employees = people.filter(function(person) {
+      for (var position in person.positions) {
+        if (person.positions[position].is_current === "true" && person.positions[position].company === company.name) {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    var past_employees = people.filter(function(person) {
+      for (var position in person.positions) {
+        if (person.positions[position].is_current === "true" && person.positions[position].company !== company.name) {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    drawWhereDidCurrentEmployeesComeFrom(current_employees);
+
+    drawWhereDoPastEmployeesGo(past_employees);
   };
 
   var showCompanyInfo = function(company) {
@@ -168,7 +190,7 @@ function main() {
     $('#desc_list').append('<table style="width:100%">')
     for (var key in company.about) {
       $('#desc_list').append(
-	    '<tr><td><h3>' + key + '</h3></td><td>' + company.about[key] + '</td></tr>')
+        '<tr><td><h3>' + key + '</h3></td><td>' + company.about[key] + '</td></tr>')
     }
     $('#desc_list').append('</table>')
   };
@@ -248,7 +270,70 @@ function main() {
       ['number', 'Slices']
     ], rows, PIE_CHART, 'chart07_div');
 
-  }
+  };
+
+  var drawWhereDidCurrentEmployeesComeFrom = function(p) {
+    var pastCompanyMap = {};
+    for (var person in p) {
+      for (var position in p[person].positions) {
+        if (p[person].positions[position].company !== company.name && p[person].positions[position].is_current === "false") {
+
+          if (pastCompanyMap[p[person].positions[position].company] === undefined) {
+            pastCompanyMap[p[person].positions[position].company] = 1;
+          } else {
+            pastCompanyMap[p[person].positions[position].company] = pastCompanyMap[p[person].positions[position].company] + 1;
+          }
+        }
+      }
+    }
+
+    var rows = [];
+    for (var key in pastCompanyMap) {
+      var entry = [];
+      entry[0] = key;
+      entry[1] = pastCompanyMap[key];
+      rows.push(entry);
+    }
+
+    // What company did they come from
+    drawBarChart("What companies did they come from", [
+        ['string', 'Past Companies'],
+        ['number', 'Companies']
+      ], rows,
+      'chart08_div');
+
+  };
+
+  var drawWhereDoPastEmployeesGo = function(p) {
+    var curCompanyMap = {};
+    for (var person in p) {
+      for (var position in p[person].positions) {
+        if (p[person].positions[position].company !== company.name && p[person].positions[position].is_current === "true") {
+
+          if (curCompanyMap[p[person].positions[position].company] === undefined) {
+            curCompanyMap[p[person].positions[position].company] = 1;
+          } else {
+            curCompanyMap[p[person].positions[position].company] = curCompanyMap[p[person].positions[position].company] + 1;
+          }
+        }
+      }
+    }
+
+    var rows = [];
+    for (var key in curCompanyMap) {
+      var entry = [];
+      entry[0] = key;
+      entry[1] = curCompanyMap[key];
+      rows.push(entry);
+    }
+
+    drawBarChart("What companies do they work for", [
+        ['string', 'Past Companies'],
+        ['number', 'Companies']
+      ], rows,
+      'chart04_div');
+
+  };
 
 
 
@@ -305,17 +390,6 @@ function main() {
     ['Others', 1]
   ], PIE_CHART, 'chart05_div');
 
-  // What company did they come from
-  drawBarChart("What companies did they come from", [
-      ['string', 'Past Companies'],
-      ['number', 'Companies']
-    ], [
-      ['Amazon', 1000],
-      ['Facebook', 1170],
-      ['LinkedIn', 660],
-      ['Adobe', 1030]
-    ],
-    'chart04_div');
 
   // Average working years in Past employees
   drawChart("Average working years in Past employees", [
@@ -326,16 +400,6 @@ function main() {
     ['Total Employees', 1],
   ], PIE_CHART, 'chart06_div');
 
-
-
-  // // What company did they go to
-  // drawChart("What company did they go to", [
-  //   ['string', 'Topping'],
-  //   ['number', 'Slices']
-  // ], [
-  //   ['Software Engineers', 3],
-  //   ['Total Employees', 1],
-  // ], PIE_CHART, 'chart07_div');
 }
 
 
